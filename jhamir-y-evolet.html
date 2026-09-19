@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Jhamir y Evolet 💜</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg:        #0c0c15;
+      --bg2:       #10101d;
+      --bg3:       #16162a;
+      --surface:   rgba(255,255,255,0.04);
+      --surface2:  rgba(255,255,255,0.07);
+      --border:    rgba(255,255,255,0.07);
+      --borderFocus: rgba(155,125,248,0.45);
+      --purple:    #9b7df8;
+      --purpleD:   #7c5cdc;
+      --purpleGlow: rgba(155,125,248,0.25);
+      --purpleSoft: rgba(155,125,248,0.12);
+      --purpleMid: rgba(155,125,248,0.18);
+      --rose:      #f0a0c0;
+      --roseGlow:  rgba(240,160,192,0.2);
+      --roseSoft:  rgba(240,160,192,0.1);
+      --gold:      #d4a96a;
+      --goldSoft:  rgba(212,169,106,0.1);
+      --text:      #e8e8f0;
+      --text2:     #9090a8;
+      --text3:     #55556a;
+      --success:   #4ade80;
+      --error:     #f87171;
+      --r:  14px;
+      --rs: 8px;
+      --rl: 22px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.6);
+      --shadowSm: 0 2px 12px rgba(0,0,0,0.3);
+      --nav-h: 66px;
+      --max-w: 560px;
+      transition: background-color 0.4s ease;
+    }
+
+    * , *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    input, textarea, select, button { font-family: inherit; }
+    img { max-width: 100%; height: auto; }
+    a { color: var(--purple); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(155,125,248,0.3); border-radius: 4px; }
+
+    /* ============ PROPOSAL ============ */
+    #proposal {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 9000; padding: 24px; overflow: hidden;
+    }
+    #proposal.fade-out { animation: fadeOut 0.6s ease forwards; }
+    @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
+    .stars-wrap { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .star-dot { position: absolute; background: white; border-radius: 50%; animation: twinkle linear infinite; }
+    @keyframes twinkle { 0%,100% { opacity: var(--base-op); } 50% { opacity: calc(var(--base-op) * 0.2); } }
+    .glow-blob { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; }
+    .glow-1 { width: 400px; height: 400px; background: rgba(155,125,248,0.08); top: -100px; left: -100px; }
+    .glow-2 { width: 350px; height: 350px; background: rgba(240,160,192,0.06); bottom: -80px; right: -80px; }
+    .proposal-card {
+      position: relative; z-index: 2; text-align: center; max-width: 440px; width: 100%;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--rl); padding: 44px 36px; backdrop-filter: blur(20px);
+    }
+    .proposal-eyebrow { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--purple); margin-bottom: 20px; opacity: 0.9; }
+    .proposal-names {
+      font-family: 'Playfair Display', serif; font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; line-height: 1.1;
+      margin-bottom: 8px; background: linear-gradient(135deg, var(--text) 0%, var(--rose) 60%, var(--purple) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .proposal-heart-line { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 18px 0 28px; }
+    .proposal-heart-line .line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(155,125,248,0.3)); }
+    .proposal-heart-line .line:last-child { background: linear-gradient(to left, transparent, rgba(155,125,248,0.3)); }
+    .proposal-q { font-size: clamp(1rem, 3vw, 1.15rem); color: var(--text2); line-height: 1.6; margin-bottom: 32px; }
+    .proposal-q strong { color: var(--text); display: block; font-size: clamp(1.15rem, 3.5vw, 1.4rem); font-weight: 600; margin-top: 8px; }
+    .proposal-btn-wrap { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
+    .btn-yes {
+      background: linear-gradient(135deg, var(--purple), var(--purpleD)); color: white; border: none;
+      padding: 14px 36px; border-radius: var(--r); font-size: 1rem; font-weight: 600; cursor: pointer;
+      transition: all 0.25s ease; box-shadow: 0 0 20px var(--purpleGlow); letter-spacing: 0.02em;
+    }
+    .btn-yes:hover { transform: translateY(-2px); box-shadow: 0 0 32px var(--purpleGlow), 0 4px 20px rgba(0,0,0,0.4); }
+    .btn-yes:active { transform: translateY(0); }
+    .btn-no {
+      background: var(--surface2); color: var(--text2); border: 1px solid var(--border);
+      padding: 14px 28px; border-radius: var(--r); font-size: 1rem; font-weight: 500; cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s; white-space: nowrap;
+    }
+    .btn-no:hover { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); color: #f87171; }
+    .no-counter-msg { margin-top: 18px; font-size: 0.82rem; color: var(--text3); min-height: 20px; transition: color 0.3s; }
+    .no-counter-msg.show { color: var(--rose); }
+    .btn-no.is-moving { position: fixed; z-index: 9999; transition: left 0.15s ease, top 0.15s ease, background 0.2s, color 0.2s; }
+
+    /* ============ APP SHELL ============ */
+    #app { display: none; flex-direction: column; min-height: 100vh; }
+    #app.visible { display: flex; }
+    .app-header {
+      position: sticky; top: 0; z-index: 100; height: 56px; background: rgba(12,12,21,0.85);
+      border-bottom: 1px solid var(--border); backdrop-filter: blur(16px);
+      display: flex; align-items: center; padding: 0 18px; gap: 10px;
+    }
+    .header-logo {
+      font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--rose), var(--purple)); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .header-days-badge {
+      background: var(--purpleSoft); border: 1px solid rgba(155,125,248,0.25); border-radius: 20px;
+      padding: 4px 12px; font-size: 0.75rem; color: var(--purple); font-weight: 500; white-space: nowrap;
+    }
+    .header-streak {
+      background: var(--goldSoft); border: 1px solid rgba(212,169,106,0.3); border-radius: 20px;
+      padding: 4px 10px; font-size: 0.72rem; color: var(--gold); font-weight: 600; white-space: nowrap;
+    }
+    .btn-settings-icon { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 1.2rem; padding: 4px; transition: color 0.2s; line-height: 1; }
+    .btn-settings-icon:hover { color: var(--text); }
+    .app-main { flex: 1; overflow-y: auto; padding-bottom: calc(var(--nav-h) + 16px); }
+    .section-page { display: none; max-width: var(--max-w); margin: 0 auto; padding: 20px 16px 8px; animation: fadeUp 0.3s ease; }
+    .section-page.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h); background: rgba(12,12,21,0.92);
+      border-top: 1px solid var(--border); backdrop-filter: blur(16px); display: flex; align-items: stretch; z-index: 100;
+    }
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      background: none; border: none; cursor: pointer; transition: all 0.2s; color: var(--text3); padding: 8px 4px; position: relative;
+    }
+    .nav-item.active { color: var(--purple); }
+    .nav-item.active::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 24px; height: 2px; background: var(--purple); border-radius: 0 0 2px 2px; }
+    .nav-icon { font-size: 1.3rem; line-height: 1; transition: transform 0.2s; }
+    .nav-item:hover .nav-icon { transform: scale(1.1); }
+    .nav-item.active .nav-icon { transform: scale(1.15); }
+    .nav-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.02em; }
+
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; backdrop-filter: blur(4px); }
+    .drawer-overlay.open { display: block; }
+    .drawer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 201; background: var(--bg2); border-top: 1px solid var(--border);
+      border-radius: var(--rl) var(--rl) 0 0; padding: 12px 0 max(env(safe-area-inset-bottom),20px);
+      transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); max-height: 80vh; overflow-y: auto;
+    }
+    .drawer.open { transform: translateY(0); }
+    .drawer-handle { width: 36px; height: 4px; background: var(--border); border-radius: 4px; margin: 0 auto 20px; }
+    .drawer-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+    .drawer-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 16px 8px; background: none; border: none; cursor: pointer; color: var(--text2); transition: all 0.2s; border-radius: var(--rs); }
+    .drawer-item:hover, .drawer-item.active { background: var(--surface); color: var(--text); }
+    .drawer-item.active { color: var(--purple); }
+    .drawer-icon { font-size: 1.5rem; }
+    .drawer-label { font-size: 0.75rem; font-weight: 500; }
+
+    /* ============ SHARED ============ */
+    .page-title { font-size: 1.45rem; font-weight: 700; margin-bottom: 4px; }
+    .page-sub { font-size: 0.82rem; color: var(--text2); margin-bottom: 24px; line-height: 1.5; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; margin-bottom: 14px; transition: border-color 0.2s; }
+    .card:hover { border-color: rgba(255,255,255,0.12); }
+    .card-title { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text2); margin-bottom: 10px; }
+    .tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+    .tag-purple { background: var(--purpleSoft); color: var(--purple); }
+    .tag-rose   { background: var(--roseSoft); color: var(--rose); }
+    .tag-gold   { background: var(--goldSoft); color: var(--gold); }
+    .tag-lock   { background: rgba(255,255,255,0.06); color: var(--text3); }
+    .divider { height: 1px; background: var(--border); margin: 18px 0; }
+    .note-box { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12); border-radius: var(--rs); padding: 12px 14px; font-size: 0.76rem; color: var(--text2); line-height: 1.55; margin-bottom: 14px; }
+    .note-box strong { color: var(--text); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple), var(--purpleD)); color: white; border: none; padding: 12px 24px;
+      border-radius: var(--r); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.25s; width: 100%; letter-spacing: 0.01em;
+    }
+    .btn-primary:hover { box-shadow: 0 0 20px var(--purpleGlow); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-secondary {
+      background: var(--surface2); color: var(--text); border: 1px solid var(--border); padding: 11px 22px;
+      border-radius: var(--r); font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.2s; width: 100%;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+    .btn-ghost { background: none; border: none; color: var(--text2); font-size: 0.82rem; cursor: pointer; padding: 6px 10px; border-radius: var(--rs); transition: all 0.2s; }
+    .btn-ghost:hover { color: var(--text); background: var(--surface); }
+    .btn-ghost-danger { color: var(--error); }
+    .btn-ghost-danger:hover { background: rgba(248,113,113,0.1); }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-row > * { flex: 1; min-width: 100px; }
+
+    .form-label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text2); margin-bottom: 6px; }
+    .form-input, .form-textarea, .form-select {
+      width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--rs);
+      color: var(--text); padding: 11px 14px; font-size: 0.9rem; transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none; appearance: none; outline: none;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text3); }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--borderFocus); background: rgba(155,125,248,0.05); }
+    .form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .form-select option { background: #1a1a2a; }
+    .form-group { margin-bottom: 14px; }
+
+    .lock-note { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--rs); padding: 10px 12px; font-size: 0.78rem; color: var(--text2); margin-bottom: 12px; }
+
+    /* ============ INICIO ============ */
+    .inicio-hero {
+      background: linear-gradient(135deg, rgba(155,125,248,0.08), rgba(240,160,192,0.05)); border: 1px solid rgba(155,125,248,0.18);
+      border-radius: var(--rl); padding: 28px 24px; text-align: center; margin-bottom: 14px; position: relative; overflow: hidden;
+    }
+    .inicio-hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(ellipse at center, rgba(155,125,248,0.06) 0%, transparent 70%); pointer-events: none; }
+    .inicio-emoji { font-size: 2.5rem; margin-bottom: 10px; }
+    .inicio-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+    .inicio-subtitle { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--purpleSoft); border: 1px solid rgba(155,125,248,0.3); border-radius: 20px; padding: 6px 14px; font-size: 0.8rem; font-weight: 500; color: var(--purple); margin-top: 14px; }
+    .status-dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; animation: pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } }
+    .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .quick-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .quick-card:hover { background: var(--surface2); border-color: rgba(155,125,248,0.3); transform: translateY(-2px); }
+    .quick-card-icon { font-size: 1.4rem; margin-bottom: 6px; }
+    .quick-card-label { font-size: 0.78rem; color: var(--text2); font-weight: 500; }
+    .pregunta-dia-box { background: linear-gradient(135deg, rgba(212,169,106,0.08), rgba(155,125,248,0.05)); border: 1px solid rgba(212,169,106,0.2); border-radius: var(--r); padding: 16px 18px; margin-bottom: 14px; }
+    .pregunta-dia-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
+    .pregunta-dia-text { font-size: 0.92rem; line-height: 1.6; font-style: italic; }
+
+    /* ============ TIEMPO ============ */
+    .counter-hero { background: linear-gradient(135deg, rgba(155,125,248,0.08), rgba(16,16,29,0.5)); border: 1px solid rgba(155,125,248,0.2); border-radius: var(--rl); padding: 32px 20px; text-align: center; margin-bottom: 14px; }
+    .counter-label { font-size: 0.8rem; color: var(--text2); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 20px; }
+    .counter-grid { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .counter-unit { display: flex; flex-direction: column; align-items: center; min-width: 52px; }
+    .counter-num { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 5vw, 2.2rem); font-weight: 700; color: var(--purple); line-height: 1; min-width: 2ch; text-align: center; }
+    .counter-unit-label { font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+    .counter-sep { font-size: 1.4rem; color: var(--text3); align-self: flex-start; padding-top: 4px; }
+    .since-date { font-size: 0.8rem; color: var(--text2); margin-top: 16px; }
+    .tiempo-start-info { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px; }
+    .tiempo-start-icon { font-size: 1.4rem; }
+    .tiempo-start-text { flex: 1; }
+    .tiempo-start-name { font-size: 0.9rem; font-weight: 600; }
+    .tiempo-start-date { font-size: 0.78rem; color: var(--text2); margin-top: 2px; }
+
+    /* ============ CARTAS ============ */
+    .carta-jhamir { background: linear-gradient(135deg, rgba(155,125,248,0.06), rgba(240,160,192,0.04)); border: 1px solid rgba(155,125,248,0.2); border-radius: var(--rl); padding: 28px 24px; margin-bottom: 14px; position: relative; }
+    .carta-from { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--purple); font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .carta-from::after { content: ''; flex: 1; height: 1px; background: rgba(155,125,248,0.2); }
+    .carta-body { font-size: 0.9rem; color: var(--text); line-height: 1.8; white-space: pre-wrap; }
+    .carta-firma { margin-top: 20px; text-align: right; font-size: 0.85rem; color: var(--purple); font-weight: 500; }
+    .carta-response { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; margin-bottom: 14px; }
+    .response-saved { display: none; background: linear-gradient(135deg, rgba(240,160,192,0.06), transparent); border: 1px solid rgba(240,160,192,0.2); border-radius: var(--r); padding: 20px; margin-bottom: 14px; }
+    .response-saved.has-content { display: block; }
+    .response-from { color: var(--rose); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; margin-bottom: 12px; }
+    .response-text { font-size: 0.9rem; line-height: 1.75; }
+
+    .carta-picker-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
+    .carta-opt { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; cursor: pointer; transition: all 0.2s; text-align: left; }
+    .carta-opt:hover { border-color: rgba(155,125,248,0.35); background: var(--surface2); }
+    .carta-opt.selected { border-color: var(--purple); background: var(--purpleSoft); }
+    .carta-opt-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 3px; }
+    .carta-opt-preview { font-size: 0.76rem; color: var(--text2); line-height: 1.5; }
+    .carta-timestamp { font-size: 0.72rem; color: var(--text3); margin-top: 10px; }
+
+    /* ============ JUEGOS ============ */
+    .games-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
+    .game-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 20px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.2s; }
+    .game-card:hover { background: var(--surface2); border-color: rgba(155,125,248,0.3); transform: translateX(4px); }
+    .game-card-icon { font-size: 2rem; flex-shrink: 0; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: var(--purpleSoft); border-radius: var(--rs); }
+    .game-card-info { flex: 1; }
+    .game-card-name { font-size: 0.95rem; font-weight: 600; margin-bottom: 3px; }
+    .game-card-desc { font-size: 0.78rem; color: var(--text2); }
+    .game-card-arrow { color: var(--text3); font-size: 1.2rem; }
+    .quiz-opt { display: block; width: 100%; text-align: left; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 11px 14px; margin-bottom: 8px; color: #e8e8f0; cursor: pointer; font-size: 0.88rem; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+    .quiz-opt:hover { background: rgba(155,125,248,0.12); border-color: rgba(155,125,248,0.3); }
+    .quiz-opt.correct { background: rgba(74,222,128,0.12); border-color: rgba(74,222,128,0.4); color: #4ade80; pointer-events: none; }
+    .quiz-opt.wrong { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); color: #f87171; pointer-events: none; }
+    .quiz-progress { display: flex; gap: 4px; margin-bottom: 16px; }
+    .quiz-dot { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.1); }
+    .quiz-dot.done { background: var(--purple); }
+    .quiz-dot.current { background: rgba(155,125,248,0.5); }
+    .ruleta-item { text-align: center; font-size: 1.05rem; color: #e8e8f0; padding: 20px; background: rgba(155,125,248,0.08); border: 1px solid rgba(155,125,248,0.2); border-radius: 12px; min-height: 80px; display: flex; align-items: center; justify-content: center; font-style: italic; line-height: 1.5; transition: all 0.15s; }
+
+    /* ============ NOSOTROS ============ */
+    .nos-tabs { display: flex; gap: 2px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 4px; margin-bottom: 20px; overflow-x: auto; }
+    .nos-tab { flex: 0 0 auto; background: none; border: none; color: var(--text2); cursor: pointer; padding: 9px 12px; border-radius: calc(var(--r) - 4px); font-size: 0.76rem; font-weight: 500; transition: all 0.2s; white-space: nowrap; }
+    .nos-tab.active { background: var(--purpleSoft); color: var(--purple); }
+    .nos-panel { display: none; }
+    .nos-panel.active { display: block; }
+    .profile-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .profile-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 14px; text-align: center; }
+    .profile-avatar { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 10px; }
+    .profile-evo .profile-avatar { background: var(--purpleSoft); border: 2px solid rgba(155,125,248,0.3); }
+    .profile-jha .profile-avatar { background: rgba(249,168,212,0.1); border: 2px solid rgba(240,160,192,0.3); }
+    .profile-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+    .profile-nick { font-size: 0.73rem; color: var(--text2); margin-bottom: 12px; }
+    .profile-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+    .profile-tag { font-size: 0.68rem; padding: 3px 8px; border-radius: 20px; background: var(--surface2); color: var(--text2); }
+    .profile-evo .profile-tag:first-child { background: var(--purpleSoft); color: var(--purple); }
+    .profile-jha .profile-tag:first-child { background: var(--roseSoft); color: var(--rose); }
+    .memory-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; margin-bottom: 10px; position: relative; }
+    .memory-date { font-size: 0.72rem; color: var(--text3); margin-bottom: 6px; }
+    .memory-title { font-size: 0.92rem; font-weight: 600; margin-bottom: 6px; }
+    .memory-desc { font-size: 0.83rem; color: var(--text2); line-height: 1.6; }
+    .memory-img { width: 100%; border-radius: var(--rs); margin-top: 12px; max-height: 200px; object-fit: cover; }
+    .memory-del { position: absolute; top: 12px; right: 12px; background: none; border: none; color: var(--text3); cursor: pointer; font-size: 0.9rem; transition: color 0.2s; }
+    .memory-del:hover { color: var(--error); }
+    .memory-author { display: inline-block; margin-top: 6px; font-size: 0.68rem; color: var(--text3); }
+    .frase-display { background: linear-gradient(135deg, rgba(155,125,248,0.08), rgba(240,160,192,0.05)); border: 1px solid rgba(155,125,248,0.18); border-radius: var(--rl); padding: 32px 24px; text-align: center; margin-bottom: 14px; min-height: 120px; display: flex; align-items: center; justify-content: center; }
+    .frase-text { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 3vw, 1.2rem); font-style: italic; line-height: 1.6; color: var(--text); }
+    .fecha-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
+    .fecha-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .fecha-dot-purple { background: var(--purple); box-shadow: 0 0 8px var(--purpleGlow); }
+    .fecha-dot-rose { background: var(--rose); box-shadow: 0 0 8px var(--roseGlow); }
+    .fecha-dot-gold { background: var(--gold); }
+    .fecha-info { flex: 1; }
+    .fecha-name { font-size: 0.88rem; font-weight: 600; }
+    .fecha-date { font-size: 0.75rem; color: var(--text2); margin-top: 2px; }
+    .fecha-days { font-size: 0.73rem; color: var(--purple); font-weight: 500; }
+    .fecha-del { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 0.85rem; transition: color 0.2s; }
+    .fecha-del:hover { color: var(--error); }
+
+    .chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .chip { display: flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 7px 8px 7px 14px; font-size: 0.82rem; }
+    .chip button { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 0.8rem; padding: 2px 4px; }
+    .chip button:hover { color: var(--error); }
+
+    .capsula-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; margin-bottom: 10px; }
+    .capsula-locked { opacity: 0.75; }
+    .capsula-status { font-size: 0.72rem; font-weight: 600; margin-bottom: 6px; }
+    .capsula-status.locked { color: var(--gold); }
+    .capsula-status.unlocked { color: var(--success); }
+    .capsula-fecha { font-size: 0.78rem; color: var(--text2); margin-bottom: 8px; }
+    .capsula-texto { font-size: 0.88rem; line-height: 1.6; }
+    .capsula-blur { filter: blur(6px); user-select: none; }
+
+    /* ============ IA ============ */
+    .ia-header-box { background: linear-gradient(135deg, rgba(155,125,248,0.1), rgba(212,169,106,0.05)); border: 1px solid rgba(155,125,248,0.2); border-radius: var(--rl); padding: 22px; text-align: center; margin-bottom: 14px; }
+    .ia-avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), var(--rose)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 10px; }
+    .ia-name { font-weight: 700; font-size: 1.05rem; margin-bottom: 4px; }
+    .ia-tagline { font-size: 0.78rem; color: var(--text2); }
+    .ia-cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .ia-cat-btn { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rs); padding: 12px 8px; text-align: center; cursor: pointer; font-size: 0.78rem; font-weight: 500; transition: all 0.2s; color: var(--text2); }
+    .ia-cat-btn:hover { border-color: rgba(155,125,248,0.35); color: var(--text); }
+    .ia-cat-btn.selected { background: var(--purpleSoft); border-color: var(--purple); color: var(--purple); }
+    .ia-output-box { background: rgba(0,0,0,0.25); border: 1px solid rgba(155,125,248,0.25); border-radius: var(--r); padding: 20px; margin-bottom: 12px; min-height: 70px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 0.92rem; line-height: 1.6; font-style: italic; }
+    .filebox { border: 1.5px dashed var(--border); border-radius: var(--r); padding: 20px; text-align: center; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; }
+    .filebox:hover { border-color: rgba(155,125,248,0.4); background: var(--surface); }
+    .filebox-icon { font-size: 1.6rem; margin-bottom: 6px; }
+    .filebox-text { font-size: 0.8rem; color: var(--text2); }
+    .memfile-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; margin-bottom: 12px; }
+    .memfile-name { font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .memfile-stat { font-size: 0.78rem; color: var(--text2); margin-top: 6px; line-height: 1.6; }
+
+    /* ============ CONFIG ============ */
+    .config-section-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); font-weight: 600; margin: 20px 0 8px; }
+    .config-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+    .config-row:last-child { border-bottom: none; }
+    .config-row-left { flex: 1; }
+    .config-row-label { font-size: 0.9rem; font-weight: 500; }
+    .config-row-desc { font-size: 0.75rem; color: var(--text2); margin-top: 2px; }
+    .toggle { width: 42px; height: 24px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.2s, border-color 0.2s; }
+    .toggle.on { background: var(--purpleMid); border-color: rgba(155,125,248,0.4); }
+    .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; background: var(--text3); border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s, background 0.2s; }
+    .toggle.on::after { left: 20px; background: var(--purple); }
+
+    .identity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .identity-opt { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--r); padding: 16px 10px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .identity-opt.selected { border-color: var(--purple); background: var(--purpleSoft); }
+    .identity-opt-icon { font-size: 1.6rem; margin-bottom: 6px; }
+    .identity-opt-name { font-size: 0.85rem; font-weight: 600; }
+
+    .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+    .theme-swatch { border: 1.5px solid var(--border); border-radius: var(--rs); padding: 10px 6px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .theme-swatch.selected { border-color: var(--purple); box-shadow: 0 0 0 1px var(--purple); }
+    .theme-swatch-dots { display: flex; justify-content: center; gap: 3px; margin-bottom: 6px; }
+    .theme-swatch-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .theme-swatch-name { font-size: 0.68rem; color: var(--text2); }
+
+    /* ============ SWEETALERT ============ */
+    .swal2-popup { background: var(--bg2) !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: var(--rl) !important; box-shadow: 0 24px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(155,125,248,0.1) !important; color: var(--text) !important; font-family: 'Inter', sans-serif !important; }
+    .swal2-title { color: var(--text) !important; font-family: 'Inter', sans-serif !important; font-size: 1.1rem !important; }
+    .swal2-html-container { color: var(--text2) !important; font-family: 'Inter', sans-serif !important; }
+    .swal2-confirm { background: linear-gradient(135deg, var(--purple), var(--purpleD)) !important; border-radius: 10px !important; font-weight: 600 !important; box-shadow: none !important; }
+    .swal2-cancel { background: var(--surface2) !important; color: var(--text) !important; border: 1px solid var(--border) !important; border-radius: 10px !important; font-weight: 500 !important; box-shadow: none !important; }
+    .swal2-input, .swal2-textarea { background: rgba(255,255,255,0.04) !important; border: 1px solid var(--border) !important; border-radius: 10px !important; color: var(--text) !important; font-family: 'Inter', sans-serif !important; }
+    .swal2-input:focus, .swal2-textarea:focus { border-color: var(--borderFocus) !important; box-shadow: none !important; }
+
+    .toast-container { position: fixed; top: 70px; right: 16px; z-index: 500; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+    .toast { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); padding: 12px 16px; font-size: 0.83rem; font-weight: 500; max-width: 260px; animation: toastIn 0.3s ease, toastOut 0.3s 2.7s ease forwards; box-shadow: var(--shadowSm); pointer-events: auto; }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { to { opacity: 0; transform: translateX(20px); } }
+
+    .empty-state { text-align: center; padding: 32px 20px; color: var(--text3); font-size: 0.85rem; line-height: 1.6; }
+    .empty-icon { font-size: 2rem; margin-bottom: 10px; }
+
+    @media (max-width: 400px) {
+      .proposal-card { padding: 30px 20px; }
+      .counter-num { font-size: 1.4rem; }
+      .counter-sep { font-size: 1.1rem; }
+      .profile-duo { grid-template-columns: 1fr; }
+      .quick-grid { grid-template-columns: 1fr 1fr; }
+      .ia-cat-grid { grid-template-columns: 1fr; }
+      .theme-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 640px) { .games-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+
+<div id="proposal">
+  <div class="stars-wrap" id="starsWrap"></div>
+  <div class="glow-blob glow-1"></div>
+  <div class="glow-blob glow-2"></div>
+  <div class="proposal-card">
+    <div class="proposal-eyebrow">para ti, con cariño</div>
+    <div class="proposal-names">Evolet</div>
+    <div class="proposal-heart-line"><div class="line"></div><span style="font-size:1.1rem">💜</span><div class="line"></div></div>
+    <div class="proposal-q">
+      Sé que no soy muy bueno para decir estas cosas sin borrarlo 3 veces antes, pero...
+      <strong>¿Quieres ser mi pareja?</strong>
+    </div>
+    <div class="proposal-btn-wrap">
+      <button class="btn-yes" onclick="aceptarPropuesta()">Sí, quiero 💜</button>
+      <button class="btn-no" id="btn-no" onclick="moverNo()">No</button>
+    </div>
+    <div class="no-counter-msg" id="noMsg"></div>
+  </div>
+</div>
+
+<div id="app">
+  <header class="app-header">
+    <div class="header-logo" id="headerLogo">J &amp; E</div>
+    <div class="header-streak" id="headerStreak" style="display:none;"></div>
+    <div class="header-days-badge" id="headerDays">💜</div>
+    <button class="btn-settings-icon" onclick="navTo('config')" title="Ajustes">⚙</button>
+  </header>
+
+  <main class="app-main">
+
+    <section class="section-page active" id="sec-inicio">
+      <div class="inicio-hero">
+        <div class="inicio-emoji">💜</div>
+        <div class="inicio-title">Jhamir y Evolet</div>
+        <div class="inicio-subtitle">Su mundo, su historia, hecho con <em>jsjs</em> y cariño.</div>
+        <div class="status-badge"><div class="status-dot"></div>Juntos desde hoy</div>
+      </div>
+
+      <div class="pregunta-dia-box">
+        <div class="pregunta-dia-label">❓ Pregunta del día</div>
+        <div class="pregunta-dia-text" id="preguntaDiaText">Cargando...</div>
+      </div>
+
+      <div class="quick-grid">
+        <div class="quick-card" onclick="navTo('tiempo')"><div class="quick-card-icon">⏱</div><div class="quick-card-label">Nuestro tiempo</div></div>
+        <div class="quick-card" onclick="navTo('cartas')"><div class="quick-card-icon">💌</div><div class="quick-card-label">Cartas</div></div>
+        <div class="quick-card" onclick="navTo('juegos')"><div class="quick-card-icon">🎮</div><div class="quick-card-label">Juegos</div></div>
+        <div class="quick-card" onclick="navTo('ia')"><div class="quick-card-icon">✨</div><div class="quick-card-label" id="quickIaLabel">Nuestra IA</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">💬 Frase del momento</div>
+        <div id="iniciofrase" style="font-size:0.9rem;line-height:1.7;font-style:italic;"></div>
+        <div style="margin-top:10px;"><button class="btn-ghost" onclick="rotarFraseInicio()">→ Otra frase</button></div>
+      </div>
+    </section>
+
+    <section class="section-page" id="sec-tiempo">
+      <div class="page-title">⏱ Nuestro tiempo</div>
+      <div class="page-sub">Cada segundo cuenta.</div>
+      <div class="counter-hero">
+        <div class="counter-label">Jhamir y Evolet llevan juntos</div>
+        <div class="counter-grid" id="counterGrid">
+          <div class="counter-unit"><div class="counter-num" id="c-y">0</div><div class="counter-unit-label">años</div></div>
+          <div class="counter-sep">·</div>
+          <div class="counter-unit"><div class="counter-num" id="c-mo">0</div><div class="counter-unit-label">meses</div></div>
+          <div class="counter-sep">·</div>
+          <div class="counter-unit"><div class="counter-num" id="c-d">0</div><div class="counter-unit-label">días</div></div>
+          <div class="counter-sep">·</div>
+          <div class="counter-unit"><div class="counter-num" id="c-h">0</div><div class="counter-unit-label">horas</div></div>
+          <div class="counter-sep">·</div>
+          <div class="counter-unit"><div class="counter-num" id="c-mi">0</div><div class="counter-unit-label">min</div></div>
+          <div class="counter-sep">·</div>
+          <div class="counter-unit"><div class="counter-num" id="c-s">0</div><div class="counter-unit-label">seg</div></div>
+        </div>
+        <div class="since-date" id="sinceDate"></div>
+      </div>
+      <div class="tiempo-start-info">
+        <div class="tiempo-start-icon">📅</div>
+        <div class="tiempo-start-text"><div class="tiempo-start-name">Fecha de inicio</div><div class="tiempo-start-date" id="startDateDisplay">—</div></div>
+        <button class="btn-ghost" id="btnEditarFecha" onclick="editarFechaInicio()">Editar</button>
+      </div>
+      <div class="card">
+        <div class="card-title">📌 Próximo aniversario</div>
+        <div id="aniverInfo" style="font-size:0.88rem;color:var(--text2);line-height:1.6;"></div>
+      </div>
+    </section>
+
+    <section class="section-page" id="sec-cartas">
+      <div class="page-title">💌 Cartas</div>
+      <div class="page-sub">Las palabras que valen.</div>
+
+      <div id="cartaAdminTools" style="display:none;">
+        <div class="lock-note">🔑 Solo tú ves esto: herramientas para escribir/editar la carta.</div>
+        <div class="card">
+          <div class="card-title">✏️ Tu carta para Evi</div>
+          <div id="cartaPickerWrap"></div>
+          <button class="btn-secondary" onclick="abrirGeneradorCarta()">🎲 Elegir / regenerar versión</button>
+        </div>
+      </div>
+
+      <div id="cartaVacia" class="empty-state" style="display:none;">
+        <div class="empty-icon">💌</div>
+        Aún no hay una carta publicada.<br>
+        <span id="cartaVaciaSub"></span>
+      </div>
+
+      <div class="carta-jhamir" id="cartaPublicada" style="display:none;">
+        <div class="carta-from">De Jhamir · para Evi</div>
+        <div class="carta-body" id="cartaBodyText"></div>
+        <div class="carta-firma">— Jhami 💜</div>
+        <div class="carta-timestamp" id="cartaTimestamp"></div>
+      </div>
+
+      <div class="response-saved" id="responseSaved">
+        <div class="response-from">De Evolet · su respuesta</div>
+        <div class="response-text" id="responseText"></div>
+        <div class="memory-date" id="responseTimestamp" style="margin-top:10px;"></div>
+        <div style="margin-top:12px;display:flex;gap:8px;">
+          <button class="btn-ghost" onclick="editarRespuesta()">Editar</button>
+          <button class="btn-ghost btn-ghost-danger" onclick="borrarRespuesta()">Borrar</button>
+        </div>
+      </div>
+
+      <div class="carta-response" id="responseForm">
+        <div class="card-title">💜 Tu respuesta, Evi</div>
+        <div style="font-size:0.8rem;color:var(--text2);margin-bottom:12px;">
+          Se guarda en este dispositivo. Si abres la página en otro cel, no se sincroniza automáticamente (no hay servidor detrás de esta página).
+        </div>
+        <div class="form-group"><textarea class="form-textarea" id="cartaResponse" placeholder="Escribe lo que quieras decir..." rows="5"></textarea></div>
+        <button class="btn-primary" onclick="guardarRespuesta()">Guardar mi respuesta</button>
+      </div>
+    </section>
+
+    <section class="section-page" id="sec-juegos">
+      <div class="page-title">🎮 Juegos</div>
+      <div class="page-sub">A ver quién sabe más del otro. jsjs.</div>
+      <div class="games-grid">
+        <div class="game-card" onclick="juegoTrivia()">
+          <div class="game-card-icon">🧠</div>
+          <div class="game-card-info"><div class="game-card-name">¿Cuánto me conoces?</div><div class="game-card-desc">10 preguntas sobre los dos</div></div>
+          <div class="game-card-arrow">›</div>
+        </div>
+        <div class="game-card" onclick="juegoRuleta()">
+          <div class="game-card-icon">🎡</div>
+          <div class="game-card-info"><div class="game-card-name">Ruleta de preguntas</div><div class="game-card-desc">Responden juntos en voz</div></div>
+          <div class="game-card-arrow">›</div>
+        </div>
+        <div class="game-card" onclick="juegoVerdadReto()">
+          <div class="game-card-icon">🃏</div>
+          <div class="game-card-info"><div class="game-card-name">Verdad o Reto</div><div class="game-card-desc">El clásico, pero de pareja</div></div>
+          <div class="game-card-arrow">›</div>
+        </div>
+        <div class="game-card" onclick="juegoCompleta()">
+          <div class="game-card-icon">✏️</div>
+          <div class="game-card-info"><div class="game-card-name">Completa la frase</div><div class="game-card-desc">A ver qué responden</div></div>
+          <div class="game-card-arrow">›</div>
+        </div>
+      </div>
+      <div class="card" id="scoreCard" style="display:none">
+        <div class="card-title">🏆 Mi puntuación en trivia</div>
+        <div id="scoreDisplay" style="font-size:1.3rem;font-weight:700;color:var(--purple);"></div>
+        <div style="font-size:0.78rem;color:var(--text2);margin-top:4px;">mejor puntaje</div>
+      </div>
+    </section>
+
+    <section class="section-page" id="sec-nosotros">
+      <div class="page-title">💜 Nosotros</div>
+      <div class="page-sub">Todo lo nuestro en un lugar.</div>
+
+      <div class="nos-tabs" id="nosTabs">
+        <button class="nos-tab active" onclick="nosTab('perfiles', this)">👤 Perfiles</button>
+        <button class="nos-tab" onclick="nosTab('frases', this)">💬 Frases</button>
+        <button class="nos-tab" onclick="nosTab('recuerdos', this)">📸 Recuerdos</button>
+        <button class="nos-tab" onclick="nosTab('fechas', this)">📅 Fechas</button>
+        <button class="nos-tab" onclick="nosTab('apodos', this)">🏷️ Apodos</button>
+        <button class="nos-tab" onclick="nosTab('capsula', this)">⏳ Cápsula</button>
+      </div>
+
+      <div class="nos-panel active" id="panel-perfiles">
+        <div class="profile-duo">
+          <div class="profile-card profile-evo">
+            <div class="profile-avatar">🌸</div>
+            <div class="profile-name">Evolet</div>
+            <div class="profile-nick">"Evi" · "mi pulga aventurera"</div>
+            <div class="profile-tags">
+              <span class="profile-tag">💜 Morado</span><span class="profile-tag">🎭 Alien Stage</span>
+              <span class="profile-tag">🐱 Ivan</span><span class="profile-tag">🌸 Chiikawa</span>
+              <span class="profile-tag">🍦 Helado</span><span class="profile-tag">🎮 Gacha Life</span>
+              <span class="profile-tag">😈 Hazbin Hotel</span><span class="profile-tag">⚙️ Alastor</span>
+              <span class="profile-tag">🔥 Iron Man</span><span class="profile-tag">✍️ Rol / OCs</span>
+            </div>
+          </div>
+          <div class="profile-card profile-jha">
+            <div class="profile-avatar">🕷️</div>
+            <div class="profile-name">Jhamir</div>
+            <div class="profile-nick">"Jhami" · "Jhamixy"</div>
+            <div class="profile-tags">
+              <span class="profile-tag">🕷️ Spider-Man</span><span class="profile-tag">⚽ Fútbol</span>
+              <span class="profile-tag">🐉 Goku</span><span class="profile-tag">💻 Tecnología</span>
+              <span class="profile-tag">7️⃣ Ronaldo</span><span class="profile-tag">10 Messi</span>
+              <span class="profile-tag">11 Neymar</span><span class="profile-tag">10 Ronaldinho</span>
+              <span class="profile-tag">22 Kaká</span>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.6rem;margin-bottom:8px;">🕷️ × 🌸</div>
+          <div style="font-size:0.85rem;color:var(--text2);line-height:1.6;">
+            Un chico que le cae el atún en el short<br>y una chica que anda entre gacha y Alien Stage.<br><em>Perfectos</em>, básicamente.
+          </div>
+        </div>
+      </div>
+
+      <div class="nos-panel" id="panel-frases">
+        <div class="frase-display" id="fraseDisplay"><div class="frase-text" id="fraseTexto">Cargando...</div></div>
+        <button class="btn-primary" onclick="nuevaFrase()" style="margin-bottom:14px;">💜 Otra frase</button>
+        <div class="card">
+          <div class="card-title">📌 Guardar una frase propia</div>
+          <div class="form-group"><input type="text" class="form-input" id="frasePropia" placeholder="Escribe tu frase aquí..."></div>
+          <button class="btn-secondary" onclick="guardarFrasePropia()">Guardar frase</button>
+        </div>
+        <div id="frasesGuardadasList"></div>
+      </div>
+
+      <div class="nos-panel" id="panel-recuerdos">
+        <div class="card">
+          <div class="card-title">➕ Agregar recuerdo</div>
+          <div class="form-group"><label class="form-label">Título</label><input type="text" class="form-input" id="memTitulo" placeholder="Ej: Primer juego juntos"></div>
+          <div class="form-group"><label class="form-label">Descripción</label><textarea class="form-textarea" id="memDesc" placeholder="Cuéntalo..." rows="3"></textarea></div>
+          <div class="form-group"><label class="form-label">Fecha</label><input type="date" class="form-input" id="memFecha"></div>
+          <div class="form-group"><label class="form-label">URL de imagen (opcional)</label><input type="text" class="form-input" id="memImg" placeholder="https://..."></div>
+          <button class="btn-primary" onclick="guardarRecuerdo()">Guardar recuerdo 📸</button>
+        </div>
+        <div id="recuerdosList"></div>
+      </div>
+
+      <div class="nos-panel" id="panel-fechas">
+        <div id="fechasList" style="margin-bottom:14px;"></div>
+        <div class="card">
+          <div class="card-title">➕ Agregar fecha</div>
+          <div class="form-group"><label class="form-label">Nombre</label><input type="text" class="form-input" id="fechaNombre" placeholder="Ej: Cumpleaños de Evi"></div>
+          <div class="form-group"><label class="form-label">Fecha</label><input type="date" class="form-input" id="fechaDate"></div>
+          <div class="form-group"><label class="form-label">Tipo</label>
+            <select class="form-select" id="fechaTipo"><option value="purple">💜 Principal</option><option value="rose">🌸 Especial</option><option value="gold">⭐ Cumpleaños</option></select>
+          </div>
+          <button class="btn-primary" onclick="guardarFecha()">Guardar fecha 📅</button>
+        </div>
+      </div>
+
+      <div class="nos-panel" id="panel-apodos">
+        <div class="note-box">Apodos que ya usan seguido, para tenerlos a la mano. Puedes agregar o quitar los que quieras.</div>
+        <div class="chip-list" id="apodosList"></div>
+        <div class="card">
+          <div class="form-group" style="margin-bottom:8px;">
+            <input type="text" class="form-input" id="apodoNuevo" placeholder="Nuevo apodo...">
+          </div>
+          <button class="btn-secondary" onclick="agregarApodo()">Agregar apodo</button>
+        </div>
+      </div>
+
+      <div class="nos-panel" id="panel-capsula">
+        <div class="note-box">Escribe algo para leer más adelante. Queda bloqueado (con el texto borroso) hasta la fecha que elijas.</div>
+        <div id="capsulasList"></div>
+        <div class="card">
+          <div class="card-title">⏳ Nueva cápsula del tiempo</div>
+          <div class="form-group"><label class="form-label">Mensaje</label><textarea class="form-textarea" id="capsulaTexto" placeholder="Lo que quieras que lean en el futuro..." rows="3"></textarea></div>
+          <div class="form-group"><label class="form-label">Se abre el</label><input type="date" class="form-input" id="capsulaFecha"></div>
+          <button class="btn-primary" onclick="guardarCapsula()">Guardar cápsula 🔒</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-page" id="sec-ia">
+      <div class="page-title">✨ Nuestra IA</div>
+      <div class="page-sub" id="iaSub">Un generador de mensajes con nuestro estilo — no una IA de verdad leyendo tu mente.</div>
+
+      <div class="note-box">
+        <strong>Qué es esto en realidad:</strong> es una plantilla de frases organizadas por categoría, no un modelo de IA conversando de verdad. Para eso (entender archivos, responder cosas nuevas) se necesitaría conectar a una API con backend propio — esta página es 100% frontend estático, así que aquí no está implementado. Más abajo puedes ver por qué y qué haría falta.
+      </div>
+
+      <div class="ia-header-box">
+        <div class="ia-avatar">✨</div>
+        <div class="ia-name" id="iaNombreDisplay">Nuestra IA</div>
+        <div class="ia-tagline">Elige un momento y te doy una idea de mensaje</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">💭 ¿Para qué momento?</div>
+        <div class="ia-cat-grid" id="iaCatGrid"></div>
+        <div class="btn-row" style="margin-top:4px;margin-bottom:10px;">
+          <button class="btn-secondary" id="iaLenBtnCorto" onclick="iaSetLen('corto')">Corto</button>
+          <button class="btn-secondary" id="iaLenBtnNormal" onclick="iaSetLen('normal')">Normal</button>
+        </div>
+        <div class="ia-output-box" id="iaOutput">Elige una categoría arriba ↑</div>
+        <div class="btn-row" style="margin-top:10px;">
+          <button class="btn-secondary" onclick="iaGenerar()">🔄 Otra idea</button>
+          <button class="btn-primary" onclick="iaGuardarComoFrase()">💾 Guardar como frase</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📎 Memoria de conversaciones (opcional)</div>
+        <div class="note-box" style="margin-bottom:12px;">
+          Esto <strong>no interpreta el contenido como haría una IA real</strong>: solo cuenta líneas y palabras frecuentes en el archivo, de forma local en tu navegador. No detecta bromas, apodos ni "quién dijo qué" con inteligencia real — para eso se necesitaría una IA de verdad conectada por backend, que no está implementada aquí. Formatos que sí se procesan: <strong>.txt, .json, .csv</strong>. PDF y DOCX no se leen en esta versión (necesitan una librería extra que no se incluyó todavía).
+        </div>
+        <div class="filebox" onclick="document.getElementById('memFileInput').click()">
+          <div class="filebox-icon">📄</div>
+          <div class="filebox-text">Toca para subir un archivo (.txt, .json, .csv)</div>
+        </div>
+        <input type="file" id="memFileInput" accept=".txt,.json,.csv,.pdf,.docx" style="display:none;" onchange="procesarArchivoMemoria(event)">
+        <div id="memFileResult"></div>
+      </div>
+    </section>
+
+    <section class="section-page" id="sec-config">
+      <div class="page-title">⚙️ Ajustes</div>
+      <div class="page-sub">Personaliza tu espacio.</div>
+
+      <div class="card">
+        <div class="config-section-title">¿Quién eres tú en este dispositivo?</div>
+        <div class="note-box">
+          Esto <strong>no es una contraseña ni un login real</strong> — es solo para que esta pantalla sepa a quién mostrarle los botones de administrador (como Reiniciar Todo). Cualquiera que abra la página puede tocar cualquiera de las dos opciones. Una protección de verdad necesitaría un backend con autenticación, que esta página no tiene por ser 100% estática.
+        </div>
+        <div class="identity-grid">
+          <div class="identity-opt" id="idOptJhamir" onclick="setWhoAmI('jhamir')"><div class="identity-opt-icon">🕷️</div><div class="identity-opt-name" id="idNameJhamir">Jhamir</div></div>
+          <div class="identity-opt" id="idOptEvolet" onclick="setWhoAmI('evolet')"><div class="identity-opt-icon">🌸</div><div class="identity-opt-name" id="idNameEvolet">Evolet</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="config-section-title">Nombres</div>
+        <div class="config-row">
+          <div class="config-row-left"><div class="config-row-label">Nombre 1</div><div class="config-row-desc">El que propone</div></div>
+          <input type="text" class="form-input" id="cfg-nombre1" style="width:140px;" value="Jhamir">
+        </div>
+        <div class="config-row">
+          <div class="config-row-left"><div class="config-row-label">Nombre 2</div><div class="config-row-desc">La que acepta</div></div>
+          <input type="text" class="form-input" id="cfg-nombre2" style="width:140px;" value="Evolet">
+        </div>
+        <div class="config-row">
+          <div class="config-row-left"><div class="config-row-label">Nombre de la IA</div><div class="config-row-desc">Cómo se llama tu asistente</div></div>
+          <input type="text" class="form-input" id="cfg-ianombre" style="width:140px;" value="Nuestra IA">
+        </div>
+        <div class="config-section-title">Preferencias</div>
+        <div class="config-row">
+          <div class="config-row-left"><div class="config-row-label">Sonidos</div><div class="config-row-desc">Efectos al interactuar</div></div>
+          <div class="toggle on" id="tog-sound" onclick="toggleSetting('sound')"></div>
+        </div>
+        <div class="config-row">
+          <div class="config-row-left"><div class="config-row-label">Animaciones</div><div class="config-row-desc">Transiciones suaves</div></div>
+          <div class="toggle on" id="tog-anim" onclick="toggleSetting('anim')"></div>
+        </div>
+        <div style="margin-top:14px;"><button class="btn-primary" onclick="guardarConfig()">Guardar ajustes</button></div>
+      </div>
+
+      <div class="card">
+        <div class="config-section-title">Tema visual</div>
+        <div class="theme-grid" id="themeGrid"></div>
+        <div style="font-size:0.74rem;color:var(--text3);margin-top:4px;">Toca un tema para verlo aplicado al instante. Se guarda solo.</div>
+      </div>
+
+      <div class="card">
+        <div class="config-section-title">Copia de seguridad</div>
+        <div style="font-size:0.82rem;color:var(--text2);line-height:1.6;margin-bottom:14px;">
+          Descarga un archivo con todo lo guardado (cartas, recuerdos, fechas, frases, etc.) para no perderlo si cambias de navegador o si algún día actualizas el código de la página.
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="exportarDatos()">⬇️ Exportar datos</button>
+          <button class="btn-secondary" onclick="if(requiereAdmin()) document.getElementById('importFileInput').click()">⬆️ Importar datos</button>
+        </div>
+        <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importarDatos(event)">
+      </div>
+
+      <div class="card">
+        <div class="config-section-title">Datos y privacidad</div>
+        <div style="font-size:0.82rem;color:var(--text2);line-height:1.6;margin-bottom:14px;">
+          Todo se guarda en <strong>localStorage</strong> de este dispositivo. No se sube a ningún servidor ni se comparte con nadie, excepto lo que tú exportes manualmente.
+        </div>
+        <div class="lock-note" id="resetLockNote">🔒 Solo disponible si tu perfil es "Jhamir" (ver arriba).</div>
+        <button class="btn-secondary" id="btnResetTodo" style="color:var(--error);border-color:rgba(248,113,113,0.3);" onclick="resetearDatos()">
+          Restablecer todos los datos
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-sec="inicio" onclick="navTo('inicio')"><div class="nav-icon">🏠</div><div class="nav-label">Inicio</div></button>
+    <button class="nav-item" data-sec="tiempo" onclick="navTo('tiempo')"><div class="nav-icon">⏱</div><div class="nav-label">Tiempo</div></button>
+    <button class="nav-item" data-sec="cartas" onclick="navTo('cartas')"><div class="nav-icon">💌</div><div class="nav-label">Cartas</div></button>
+    <button class="nav-item" data-sec="ia" onclick="navTo('ia')"><div class="nav-icon">✨</div><div class="nav-label">IA</div></button>
+    <button class="nav-item" onclick="openDrawer()"><div class="nav-icon">··</div><div class="nav-label">Más</div></button>
+  </nav>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-grid">
+    <button class="drawer-item" onclick="navTo('juegos');closeDrawer();"><div class="drawer-icon">🎮</div><div class="drawer-label">Juegos</div></button>
+    <button class="drawer-item" onclick="navTo('nosotros');closeDrawer();"><div class="drawer-icon">💜</div><div class="drawer-label">Nosotros</div></button>
+    <button class="drawer-item" onclick="nosTab('recuerdos',null);navTo('nosotros');closeDrawer();"><div class="drawer-icon">📸</div><div class="drawer-label">Recuerdos</div></button>
+    <button class="drawer-item" onclick="nosTab('frases',null);navTo('nosotros');closeDrawer();"><div class="drawer-icon">💬</div><div class="drawer-label">Frases</div></button>
+    <button class="drawer-item" onclick="nosTab('fechas',null);navTo('nosotros');closeDrawer();"><div class="drawer-icon">📅</div><div class="drawer-label">Fechas</div></button>
+    <button class="drawer-item" onclick="nosTab('apodos',null);navTo('nosotros');closeDrawer();"><div class="drawer-icon">🏷️</div><div class="drawer-label">Apodos</div></button>
+    <button class="drawer-item" onclick="nosTab('capsula',null);navTo('nosotros');closeDrawer();"><div class="drawer-icon">⏳</div><div class="drawer-label">Cápsula</div></button>
+    <button class="drawer-item" onclick="navTo('config');closeDrawer();"><div class="drawer-icon">⚙️</div><div class="drawer-label">Ajustes</div></button>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   CAPA DE DATOS (localStorage con versión + migración)
+============================================================ */
+const LS = {
+  get: (k, def) => { try { const v = localStorage.getItem('je_' + k); return v !== null ? JSON.parse(v) : def; } catch { return def; } },
+  set: (k, v) => { try { localStorage.setItem('je_' + k, JSON.stringify(v)); } catch {} },
+  del: (k) => { try { localStorage.removeItem('je_' + k); } catch {} }
+};
+
+const DATA_VERSION = 2;
+const ALL_KEYS = ['accepted','startDate','settings','recuerdos','fechas','frasesGuardadas','response','responseDate',
+  'highScore','names','whoami','cartaPublicada','cartaPublicadaFecha','apodos','capsulas','memoriaArchivo','theme',
+  'racha','iaNombre','dataVersion'];
+
+// Migración: si hay datos de una versión anterior, se completan campos nuevos sin borrar nada existente.
+function migrarDatos() {
+  const v = LS.get('dataVersion', 1);
+  if (v < 2) {
+    let recuerdos = LS.get('recuerdos', []);
+    let cambiado = false;
+    recuerdos = recuerdos.map(r => { if (!r.autor) { r.autor = 'jhamir'; cambiado = true; } return r; });
+    if (cambiado) LS.set('recuerdos', recuerdos);
+    LS.set('dataVersion', 2);
+  }
+}
+migrarDatos();
+
+let state = {
+  accepted:     LS.get('accepted', false),
+  startDate:    LS.get('startDate', null),
+  settings:     LS.get('settings', { sound: true, anim: true }),
+  recuerdos:    LS.get('recuerdos', []),
+  fechas:       LS.get('fechas', [{ id: 1, nombre: 'Nuestro primer día', fecha: null, tipo: 'purple' }]),
+  frases:       LS.get('frasesGuardadas', []),
+  response:     LS.get('response', ''),
+  responseDate: LS.get('responseDate', null),
+  highScore:    LS.get('highScore', 0),
+  names:        LS.get('names', { n1: 'Jhamir', n2: 'Evolet' }),
+  whoami:       LS.get('whoami', null),
+  cartaPublicada: LS.get('cartaPublicada', null),
+  cartaPublicadaFecha: LS.get('cartaPublicadaFecha', null),
+  apodos:       LS.get('apodos', ['Evi', 'Jhami', 'enana emo', 'pulga aventurera']),
+  capsulas:     LS.get('capsulas', []),
+  memoriaArchivo: LS.get('memoriaArchivo', null),
+  theme:        LS.get('theme', 'noche'),
+  iaNombre:     LS.get('iaNombre', 'Nuestra IA')
+};
+
+let counterInterval = null;
+let noClickCount = 0;
+let frasesIndex = 0;
+
+/* ============================================================
+   CONTENIDO: frases, botón No, cartas, IA, temas, preguntas
+============================================================ */
+const FRASES = [
+  '"Cuídate, oki. Me hiciste promesa."',
+  '"Jsjs no sé cómo decirlo bien, pero tkm evi 💜"',
+  '"Eres mi pulga aventurera favorita."',
+  '"Aishiteru, evi."',
+  '"Siempre terminabas hablando conmigo. Eso me importaba."',
+  '"Quédate. Así de simple."',
+  '"Te quiero, te quiero, y te quiero."',
+  '"Yo también te kiero, mucho más de lo que digo en los mensajes."',
+  '"Mi evi 💜 La más dramática y la más mía."',
+  '"No soy el mejor para decir estas cosas, pero aquí estoy."',
+  '"Una pulga aventurera, pero mía."',
+  '"El que dice jsjs pero en el fondo todo lo siente en serio."',
+  '"Me importas mucho, la vrd."',
+  '"Contigo hasta hablar de OCs tiene sentido, aunque me pierda jsjs."'
+];
+
+const NO_MSGS = [
+  '¿Segura, Evi? Jsjs.',
+  'Piénsalo otra vez, enana.',
+  'Bueno, no te voy a obligar, pero igual me dio penita.',
+  'Aish, yo quería que dijeras que sí.',
+  'Está bien, pero aquí sigo esperando.',
+  'No pasa nada, igual te quiero.',
+  'Última oportunidad… mentira, tú decides.',
+  'Ok ok, tranquila, no muerdo.',
+  'Ese botón no tiene la culpa, sabes.',
+  'Mmm, dale otra pensada.',
+  'Va, tú tienes la última palabra.',
+  'Ni modo, seguiré insistiendo un rato jsjs.',
+  'Está bien, no es que me duela... un poco sí.',
+  'Puedes decir que sí cuando quieras, eh.',
+  'Bueno bueno, ahí lo dejo.',
+  'Sigo aquí, por si cambias de idea.',
+  'Ya, no pasa nada en serio.',
+  'Jsjs vale, lo intento de nuevo luego.'
+];
+
+const CARTA_VERSIONS = [
+  { id: 'corta', label: '1. Más natural y corta',
+    text: `Evi. Esto es corto porque si me extiendo lo voy a borrar de nuevo.
+
+Me importas bastante, más de lo que digo normalmente. Te quiero, enana emo.
+
+Quédate.
+
+— Jhami 💜` },
+  { id: 'tranquila', label: '2. Cariñosa, pero tranquila',
+    text: `Evi, no es nada dramático, solo quería escribirte algo tranquilo.
+
+Me gusta tenerte cerca, hablar contigo de lo que sea, hasta cuando me hablas de tus OCs y yo ando medio perdido. Me importas de verdad, aunque no siempre lo diga tanto.
+
+Te quiero, mi pulga aventurera.
+
+— Jhami 💜` },
+  { id: 'romantica', label: '3. Más romántica, sin ser cringe',
+    text: `Evi, borré esto un par de veces porque no sabía bien cómo empezar.
+
+Me haces sentir tranquilo de una forma que no esperaba, y ya eso dice bastante viniendo de mí. No te voy a llenar esto de cosas exageradas, pero sí quiero que sepas que te quiero, y que me gusta que estés en mi día a día.
+
+Quédate, enana emo. Aishiteru.
+
+— Jhami 💜` },
+  { id: 'bromas', label: '4. Con bromas y detalles nuestros',
+    text: `Evi, esto lo escribo mientras como atún con galleta, así que ya sabes el nivel de concentración que tengo jsjs.
+
+Fuera de broma, me gusta hablar contigo de cualquier cosa, hasta de gacha cuando ya ni tú quieres hablar de eso. Me importas mucho, pulga aventurera.
+
+Te quiero, enana emo.
+
+— Jhami 💜` },
+  { id: 'estilo', label: '5. Escrita completamente como Jhamir',
+    text: `Evi, no sé muy bien cómo empezar esto jsjs, pero quería decirte algo. A veces no soy muy bueno diciendo lo que siento, pero sí quiero que sepas que me importas demasiado. Me gusta tenerte conmigo, hablar contigo aunque sea de cualquier tontería y escuchar tus cosas, incluso cuando me hablas de tus OCs o de Alien Stage y yo estoy medio perdido.
+
+Me haces feliz de una forma bien rara, pero bonita. Y aunque a veces me haga el tranquilo, sí me gusta saber que estás ahí. No quiero hacer esto demasiado cursi porque ya sabes cómo soy, pero te quiero bastante, enana emo.
+
+Gracias por estar conmigo, por las bromas y por ser tú, mi enana.
+
+— Jhami 💜` }
+];
+
+const IA_TEMPLATES = {
+  buenos_dias: { label: '☀️ Buenos días',
+    corto: ['Buenos días, enana.', 'Buenos días, pulga aventurera.', 'Oe, buenos días.', 'Buenos días, Evi.'],
+    normal: ['Buenos días, enana. Espero que amanezcas de buenas jsjs.', 'Buenos días pulga aventurera, que tengas un buen día.', '¿Amaneciste bien? Buenos días de todas formas.', 'Buenos días, Evi. Ya sabes, cuídate hoy.'] },
+  buenas_noches: { label: '🌙 Buenas noches',
+    corto: ['Buenas noches, Evi.', 'Descansa, enana.', 'Buenas noches, pulga.', 'Ya duérmete jsjs.'],
+    normal: ['Buenas noches, evi. Descansa.', 'Ya duérmete, mañana seguimos hablando. Buenas noches.', 'Buenas noches enana emo, que sueñes bonito.', 'Nos vemos mañana, descansa bien.'] },
+  extrano: { label: '🫂 Te extraño',
+    corto: ['Te extraño un poco.', 'Me acordé de ti.', 'Ps, te extraño.', 'Quisiera hablar contigo ahorita.'],
+    normal: ['Ps, te extraño un poco. No es para tanto pero sí.', 'Oe, hoy me acordé de ti de la nada.', 'Te extraño, aunque suene raro decirlo así directo.', 'Quisiera que estuvieras aquí ahorita, la vrd.'] },
+  animo: { label: '🤍 Para animarte',
+    corto: ['Aquí ando, tranquila.', 'Todo va a estar bien.', 'Cuenta conmigo.', 'Ya va a pasar, tranquila.'],
+    normal: ['Oe, sé que no la estás pasando bien, pero aquí ando.', 'Todo va a estar bien, tranquila. Aquí estoy si necesitas algo.', 'No te agobies tanto, ya va a pasar.', 'Cuenta conmigo para lo que sea, en serio.'] },
+  disculpa: { label: '🙏 Disculpa',
+    corto: ['Perdón, enana.', 'Discúlpame, en serio.', 'Ps, perdón por eso.', 'No fue mi intención, perdón.'],
+    normal: ['Perdón si dije algo que no era, no fue mi intención.', 'Ps, discúlpame si me porté raro, no era contra ti.', 'Perdón enana, a veces se me pasa la mano.', 'Discúlpame, no quise hacerte sentir mal.'] },
+  gracias: { label: '💜 Agradecimiento',
+    corto: ['Gracias por todo.', 'Gracias por estar ahí.', 'Gracias, enana.', 'Te lo agradezco, en serio.'],
+    normal: ['Gracias por aguantarme, en serio.', 'Gracias por estar ahí, no siempre lo digo pero lo pienso.', 'Gracias por ser como eres, pulga aventurera.', 'Gracias por las bromas y por todo, en serio.'] },
+  gracioso: { label: '😂 Para molestar',
+    corto: ['Oe enana jsjs.', 'Ya deja el gacha jsjs.', 'Se me cayó el atún otra vez.', 'Pulga aventurera detectada.'],
+    normal: ['Oe enana, ¿ya comiste o sigues de dieta de aire?', 'Cuidado que te vas a volver una pulga aventurera de verdad jsjs.', 'Ya deja de gastar batería en gacha y contéstame jsjs.', 'Se me cayó el atún otra vez, ya es oficial mi maldición.'] },
+  aniversario: { label: '🎉 Meses / aniversario',
+    corto: ['Feliz mes, enana.', 'Otro mes más.', 'Feliz aniversario.', 'Un mes más contigo.'],
+    normal: ['Feliz mes, enana emo. Aquí seguimos.', 'Otro mes más contigo, pulga aventurera.', 'Feliz aniversario, gracias por quedarte.', 'Un mes más, y contando. Te quiero.'] }
+};
+
+const THEMES = {
+  noche:   { name: 'Noche estrellada', vars: { '--purple':'#9b7df8','--purpleD':'#7c5cdc','--rose':'#f0a0c0','--gold':'#d4a96a','--bg':'#0c0c15','--bg2':'#10101d','--bg3':'#16162a' } },
+  rosa:    { name: 'Rosa suave',       vars: { '--purple':'#e893b3','--purpleD':'#d16f95','--rose':'#f5c2d6','--gold':'#e0a96a','--bg':'#160f13','--bg2':'#1c1216','--bg3':'#241619' } },
+  violeta: { name: 'Violeta nocturno', vars: { '--purple':'#8b6df0','--purpleD':'#6a4dd1','--rose':'#c9a0f0','--gold':'#c9b06a','--bg':'#0d0b17','--bg2':'#120f1f','--bg3':'#171328' } },
+  dorado:  { name: 'Dorado elegante',  vars: { '--purple':'#d4a96a','--purpleD':'#b8874a','--rose':'#e8c88a','--gold':'#f0d9a0','--bg':'#100d08','--bg2':'#17130c','--bg3':'#1e1810' } },
+  minimal: { name: 'Minimalista oscuro', vars: { '--purple':'#a0a0b0','--purpleD':'#7a7a8a','--rose':'#c0c0cc','--gold':'#8a8a9a','--bg':'#0a0a0c','--bg2':'#101012','--bg3':'#151518' } },
+  aracnido:{ name: '🕷️ Arácnido',      vars: { '--purple':'#e0453f','--purpleD':'#b8302a','--rose':'#4a6fd4','--gold':'#e0703a','--bg':'#0a0a0f','--bg2':'#12080a','--bg3':'#1a0d10' } },
+  alien:   { name: '🎭 Alien Stage',   vars: { '--purple':'#c04ee0','--purpleD':'#9a30ba','--rose':'#ff5fa8','--gold':'#8a4ae0','--bg':'#0a0612','--bg2':'#0f0918','--bg3':'#150d20' } }
+};
+
+const PREGUNTAS_DIA = [
+  '¿Qué fue lo mejor que les pasó esta semana?',
+  '¿Prefieren helado o pizza hoy?',
+  '¿Cuál es la palabra que más repiten últimamente?',
+  '¿Quién manda el primer mensaje del día, normalmente?',
+  '¿Qué canción no puede faltar en su playlist de pareja?',
+  '¿Prefieren llamada o mensajes de texto?',
+  '¿Cuál fue el último sticker random que se mandaron?',
+  '¿Qué les hizo reír hoy?',
+  '¿Qué comida quieren pedir juntos algún día?',
+  '¿Cuál es su meme favorito del momento?',
+  '¿Qué sería lo primero que harían si se vieran hoy?',
+  '¿Prefieren mañana o madrugada para hablar?',
+  '¿Cuál es su serie o anime pendiente por ver juntos?',
+  '¿Qué apodo nuevo se podrían inventar hoy?',
+  '¿A quién le cuesta más despedirse en la noche?'
+];
+
+function fraseAleatoria() { const i = Math.floor(Math.random() * FRASES.length); frasesIndex = i; return FRASES[i]; }
+function nuevaFrase() {
+  frasesIndex = (frasesIndex + 1) % FRASES.length;
+  const el = document.getElementById('fraseTexto');
+  if (el) { el.style.opacity = '0'; setTimeout(() => { el.textContent = FRASES[frasesIndex]; el.style.opacity = '1'; el.style.transition = 'opacity 0.3s'; }, 150); }
+}
+function rotarFraseInicio() {
+  const el = document.getElementById('iniciofrase'); const f = fraseAleatoria();
+  if (el) { el.style.opacity = '0'; setTimeout(() => { el.textContent = f; el.style.opacity = '1'; el.style.transition = 'opacity 0.3s'; }, 150); }
+}
+
+/* ============================================================
+   ESTRELLAS (proposal)
+============================================================ */
+function crearEstrellas() {
+  const wrap = document.getElementById('starsWrap');
+  if (!wrap) return;
+  for (let i = 0; i < 70; i++) {
+    const s = document.createElement('div');
+    s.className = 'star-dot';
+    const size = 0.5 + Math.random() * 1.8;
+    const op = 0.15 + Math.random() * 0.45;
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--base-op:${op};animation-duration:${3+Math.random()*5}s;animation-delay:-${Math.random()*8}s;`;
+    wrap.appendChild(s);
+  }
+}
+
+/* ============================================================
+   BOTÓN NO (proposal) — límites reales con getBoundingClientRect
+============================================================ */
+function moverNo() {
+  noClickCount++;
+  const btn = document.getElementById('btn-no');
+  const msg = document.getElementById('noMsg');
+  if (!btn.classList.contains('is-moving')) btn.classList.add('is-moving');
+
+  const bw = btn.offsetWidth || 80;
+  const bh = btn.offsetHeight || 44;
+  const m = 16;
+  const maxX = window.innerWidth - bw - m;
+  const maxY = window.innerHeight - bh - m;
+  const nx = m + Math.random() * Math.max(0, maxX - m);
+  const ny = m + Math.random() * Math.max(0, maxY - m);
+  btn.style.left = nx + 'px';
+  btn.style.top = ny + 'px';
+
+  if (msg) {
+    msg.textContent = NO_MSGS[(noClickCount - 1) % NO_MSGS.length];
+    msg.classList.add('show');
+  }
+
+  if (noClickCount === 7) {
+    setTimeout(() => {
+      Swal.fire({
+        title: 'Ok, en serio...',
+        text: '¿Realmente quieres decir que no?',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, de verdad no',
+        cancelButtonText: 'Jsjs era broma, sí quiero',
+        confirmButtonColor: '#f87171',
+        cancelButtonColor: '#9b7df8'
+      }).then(r => { if (r.isConfirmed) mostrarNoFinal(); else aceptarPropuesta(); });
+    }, 400);
+  }
+}
+
+function mostrarNoFinal() {
+  const p = document.getElementById('proposal');
+  p.innerHTML = `
+    <div style="text-align:center;max-width:380px;padding:40px 24px;">
+      <div style="font-size:2.5rem;margin-bottom:16px;">💙</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:12px;">Está bien.</div>
+      <div style="font-size:0.9rem;color:var(--text2);line-height:1.7;margin-bottom:28px;">
+        No te voy a obligar. Igual tkm mucho, evi.<br>Si cambias de opinión, aquí voy a estar. Siempre.
+      </div>
+      <button class="btn-yes" onclick="aceptarPropuesta()">Espera, me arrepentí 💜</button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   ACEPTAR PROPUESTA
+============================================================ */
+function aceptarPropuesta() {
+  const proposal = document.getElementById('proposal');
+  const app = document.getElementById('app');
+  if (!state.startDate) { state.startDate = new Date().toISOString(); LS.set('startDate', state.startDate); }
+  state.accepted = true; LS.set('accepted', true);
+
+  const d = { particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#9b7df8','#f0a0c0','#d4a96a','#ffffff'] };
+  confetti(d);
+  setTimeout(() => confetti({ ...d, particleCount: 80, origin: { y: 0.7 } }), 400);
+
+  Swal.fire({
+    title: '💜 Sí',
+    html: `<div style="font-size:0.9rem;line-height:1.7;">Ya somos oficiales.<br><em style="color:var(--text2);">Aishiteru, evi.</em></div>`,
+    confirmButtonText: '¡Empezamos! 🕷️×🌸',
+    timer: 4000, timerProgressBar: true
+  }).then(() => {
+    proposal.classList.add('fade-out');
+    setTimeout(() => { proposal.style.display = 'none'; app.classList.add('visible'); initApp(); }, 600);
+  });
+}
+
+/* ============================================================
+   INICIAR APP
+============================================================ */
+function initApp() {
+  actualizarNombresUI();
+  actualizarIaNombreUI();
+  actualizarIdentidadUI();
+  actualizarAdminUI();
+  cargarRespuesta();
+  cargarCartaPublicada();
+  renderCartaAdminPicker();
+  renderFechas();
+  renderRecuerdos();
+  renderFrasesGuardadas();
+  renderApodos();
+  renderCapsulas();
+  renderPreguntaDia();
+  renderThemeGrid();
+  aplicarTemaSilencioso(state.theme);
+  renderMemFile();
+  renderIaCatGrid();
+  iaSetLen('normal');
+  actualizarRacha();
+  iniciarContador();
+  actualizarHeaderDays();
+  actualizarScoreCard();
+
+  document.getElementById('iniciofrase').textContent = fraseAleatoria();
+  document.getElementById('fraseTexto').textContent = FRASES[0];
+
+  const s = state.settings;
+  document.getElementById('tog-sound').classList.toggle('on', s.sound);
+  document.getElementById('tog-anim').classList.toggle('on', s.anim);
+  document.getElementById('cfg-nombre1').value = state.names.n1;
+  document.getElementById('cfg-nombre2').value = state.names.n2;
+  document.getElementById('cfg-ianombre').value = state.iaNombre;
+}
+
+/* ============================================================
+   CONTADOR DE TIEMPO
+============================================================ */
+function calcularTiempoExacto(ini, ahora) {
+  let y = ahora.getFullYear() - ini.getFullYear();
+  let mo = ahora.getMonth() - ini.getMonth();
+  let d = ahora.getDate() - ini.getDate();
+  let h = ahora.getHours() - ini.getHours();
+  let mi = ahora.getMinutes() - ini.getMinutes();
+  let s = ahora.getSeconds() - ini.getSeconds();
+  if (s < 0) { mi--; s += 60; }
+  if (mi < 0) { h--; mi += 60; }
+  if (h < 0) { d--; h += 24; }
+  if (d < 0) { mo--; const prev = new Date(ahora.getFullYear(), ahora.getMonth(), 0).getDate(); d += prev; }
+  if (mo < 0) { y--; mo += 12; }
+  return { y, mo, d, h, mi, s };
+}
+
+function iniciarContador() {
+  if (!state.startDate) return;
+  const tick = () => {
+    const ini = new Date(state.startDate);
+    const ahora = new Date();
+    const t = calcularTiempoExacto(ini, ahora);
+    const pad = n => String(n).padStart(2,'0');
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = pad(v); };
+    set('c-y', t.y); set('c-mo', t.mo); set('c-d', t.d); set('c-h', t.h); set('c-mi', t.mi); set('c-s', t.s);
+
+    const fechaInicio = ini.toLocaleDateString('es-ES', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const el1 = document.getElementById('startDateDisplay'); const el2 = document.getElementById('sinceDate');
+    if (el1) el1.textContent = fechaInicio;
+    if (el2) el2.textContent = 'Desde el ' + fechaInicio;
+
+    const aniv = document.getElementById('aniverInfo');
+    if (aniv) {
+      const anivFecha = new Date(ahora.getFullYear() + (ahora.getMonth() > ini.getMonth() || (ahora.getMonth() === ini.getMonth() && ahora.getDate() >= ini.getDate()) ? 1 : 0), ini.getMonth(), ini.getDate());
+      const diasAniv = Math.ceil((anivFecha - ahora) / 86400000);
+      if (diasAniv === 0) aniv.textContent = '🎉 ¡Hoy es nuestro aniversario!';
+      else if (diasAniv === 1) aniv.textContent = '🎊 ¡Mañana es nuestro aniversario!';
+      else aniv.textContent = `Faltan ${diasAniv} días para el próximo aniversario (${anivFecha.toLocaleDateString('es-ES', { day:'2-digit', month:'long' })}).`;
+    }
+    actualizarHeaderDays();
+  };
+  tick();
+  clearInterval(counterInterval);
+  counterInterval = setInterval(tick, 1000);
+}
+
+function actualizarHeaderDays() {
+  if (!state.startDate) return;
+  const ini = new Date(state.startDate); const ahora = new Date();
+  const t = calcularTiempoExacto(ini, ahora);
+  const badge = document.getElementById('headerDays');
+  if (badge) {
+    if (t.y > 0) badge.textContent = `💜 ${t.y}a ${t.mo}m`;
+    else if (t.mo > 0) badge.textContent = `💜 ${t.mo}m ${t.d}d`;
+    else badge.textContent = `💜 ${t.d}d ${String(t.h).padStart(2,'0')}h`;
+  }
+}
+
+function editarFechaInicio() {
+  if (!requiereAdmin()) return;
+  Swal.fire({
+    title: 'Cambiar fecha de inicio',
+    html: `<div style="font-size:0.82rem;color:var(--text2);margin-bottom:12px;">Esto reinicia el contador. ¿Seguro?</div><input type="datetime-local" id="swal-fecha" class="swal2-input" style="width:100%;">`,
+    showCancelButton: true, confirmButtonText: 'Guardar', cancelButtonText: 'Cancelar',
+    preConfirm: () => { const v = document.getElementById('swal-fecha').value; if (!v) { Swal.showValidationMessage('Selecciona una fecha'); return false; } return v; }
+  }).then(r => {
+    if (r.isConfirmed) {
+      state.startDate = new Date(r.value).toISOString();
+      LS.set('startDate', state.startDate);
+      iniciarContador();
+      toast('Fecha actualizada 📅');
+    }
+  });
+}
+
+/* ============================================================
+   IDENTIDAD / ADMIN (provisional — no es autenticación real)
+============================================================ */
+function esAdmin() { return state.whoami === 'jhamir'; }
+
+function requiereAdmin() {
+  if (esAdmin()) return true;
+  Swal.fire({
+    title: '🔒 Solo Jhamir',
+    html: 'Esta acción es del administrador de la página. Si eres Jhamir, ve a Ajustes y selecciona tu perfil.<br><br><span style="font-size:0.76rem;color:var(--text3);">(Es una protección visual para evitar toques accidentales, no seguridad real de backend — cualquiera podría cambiar el selector.)</span>',
+    confirmButtonText: 'Entendido'
+  });
+  return false;
+}
+
+function setWhoAmI(who) {
+  state.whoami = who; LS.set('whoami', who);
+  actualizarIdentidadUI(); actualizarAdminUI(); cargarCartaPublicada(); renderCartaAdminPicker();
+  toast(who === 'jhamir' ? 'Perfil: Jhamir 🕷️' : 'Perfil: Evolet 🌸');
+}
+
+function actualizarIdentidadUI() {
+  document.getElementById('idOptJhamir')?.classList.toggle('selected', state.whoami === 'jhamir');
+  document.getElementById('idOptEvolet')?.classList.toggle('selected', state.whoami === 'evolet');
+  const n1 = document.getElementById('idNameJhamir'); if (n1) n1.textContent = state.names.n1;
+  const n2 = document.getElementById('idNameEvolet'); if (n2) n2.textContent = state.names.n2;
+}
+
+function actualizarAdminUI() {
+  const admin = esAdmin();
+  const resetBtn = document.getElementById('btnResetTodo');
+  const resetNote = document.getElementById('resetLockNote');
+  if (resetBtn) resetBtn.style.opacity = admin ? '1' : '0.55';
+  if (resetNote) resetNote.style.display = admin ? 'none' : 'flex';
+  const cartaAdminTools = document.getElementById('cartaAdminTools');
+  if (cartaAdminTools) cartaAdminTools.style.display = admin ? 'block' : 'none';
+}
+
+/* ============================================================
+   CARTAS — generador con aprobación manual
+============================================================ */
+function renderCartaAdminPicker() {
+  const wrap = document.getElementById('cartaPickerWrap');
+  if (!wrap) return;
+  wrap.innerHTML = state.cartaPublicada
+    ? '<div style="font-size:0.82rem;color:var(--text2);margin-bottom:10px;">Ya tienes una carta publicada. Puedes cambiarla cuando quieras.</div>'
+    : '<div style="font-size:0.82rem;color:var(--text2);margin-bottom:10px;">Aún no has publicado ninguna. Elige una versión para Evi.</div>';
+}
+
+function abrirGeneradorCarta() {
+  let seleccionId = CARTA_VERSIONS[0].id;
+  let textoEditado = CARTA_VERSIONS[0].text;
+
+  const render = () => {
+    const opcionesHtml = CARTA_VERSIONS.map(v =>
+      `<div class="carta-opt ${v.id===seleccionId?'selected':''}" onclick="window._elegirCartaVersion('${v.id}')"><div class="carta-opt-title">${v.label}</div></div>`
+    ).join('');
+    Swal.fire({
+      title: '💌 Elige una versión',
+      html: `<div class="carta-picker-grid" id="swalCartaOpts">${opcionesHtml}</div>
+             <textarea class="swal2-textarea" id="swalCartaTexto" rows="9" style="width:100%;font-size:0.85rem;line-height:1.6;">${textoEditado}</textarea>
+             <div style="font-size:0.74rem;color:var(--text3);margin-top:6px;">Puedes editar el texto libremente antes de aceptarla.</div>`,
+      width: 480,
+      showCancelButton: true, showDenyButton: true,
+      confirmButtonText: '✅ Aceptar y publicar', denyButtonText: '🔄 Ver otra versión', cancelButtonText: 'Cerrar',
+      focusConfirm: false,
+      preConfirm: () => document.getElementById('swalCartaTexto').value
+    }).then(r => {
+      if (r.isConfirmed) {
+        const textoFinal = (r.value || '').trim();
+        if (!textoFinal) { toast('La carta no puede quedar vacía'); return; }
+        publicarCarta(textoFinal);
+      } else if (r.isDenied) {
+        const idx = CARTA_VERSIONS.findIndex(v => v.id === seleccionId);
+        const next = CARTA_VERSIONS[(idx + 1) % CARTA_VERSIONS.length];
+        seleccionId = next.id; textoEditado = next.text;
+        render();
+      }
+    });
+  };
+
+  window._elegirCartaVersion = (id) => {
+    seleccionId = id;
+    const v = CARTA_VERSIONS.find(x => x.id === id);
+    textoEditado = v.text;
+    render();
+  };
+
+  render();
+}
+
+function publicarCarta(texto) {
+  state.cartaPublicada = texto;
+  state.cartaPublicadaFecha = new Date().toLocaleString('es-ES', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  LS.set('cartaPublicada', texto);
+  LS.set('cartaPublicadaFecha', state.cartaPublicadaFecha);
+  cargarCartaPublicada();
+  renderCartaAdminPicker();
+  toast('Carta publicada 💌');
+  confetti({ particleCount: 60, spread: 55, origin: { y: 0.6 }, colors: ['#9b7df8','#f0a0c0','#d4a96a'] });
+}
+
+function cargarCartaPublicada() {
+  const vacia = document.getElementById('cartaVacia');
+  const pub = document.getElementById('cartaPublicada');
+  const body = document.getElementById('cartaBodyText');
+  const ts = document.getElementById('cartaTimestamp');
+  if (state.cartaPublicada) {
+    if (vacia) vacia.style.display = 'none';
+    if (pub) pub.style.display = 'block';
+    if (body) body.textContent = state.cartaPublicada;
+    if (ts) ts.textContent = state.cartaPublicadaFecha ? 'Publicada el ' + state.cartaPublicadaFecha : '';
+  } else {
+    if (pub) pub.style.display = 'none';
+    if (vacia) {
+      vacia.style.display = 'block';
+      const sub = document.getElementById('cartaVaciaSub');
+      if (sub) sub.textContent = esAdmin() ? 'Usa las herramientas de arriba para crear la tuya.' : 'Jhamir todavía está escribiendo la suya.';
+    }
+  }
+}
+
+function cargarRespuesta() {
+  const r = state.response;
+  const saved = document.getElementById('responseSaved');
+  const form = document.getElementById('responseForm');
+  const rt = document.getElementById('responseText');
+  const inp = document.getElementById('cartaResponse');
+  const ts = document.getElementById('responseTimestamp');
+  if (r && r.trim()) {
+    if (saved) { saved.classList.add('has-content'); saved.style.display = 'block'; }
+    if (rt) rt.textContent = r;
+    if (form) form.style.display = 'none';
+    if (ts) ts.textContent = state.responseDate ? '✏️ Guardada el ' + state.responseDate : '';
+  } else {
+    if (saved) { saved.classList.remove('has-content'); saved.style.display = 'none'; }
+    if (form) form.style.display = 'block';
+    if (inp) inp.value = '';
+    if (ts) ts.textContent = '';
+  }
+}
+
+function guardarRespuesta() {
+  const txt = document.getElementById('cartaResponse')?.value?.trim();
+  if (!txt) { toast('Escribe algo primero 💜'); return; }
+  const ahora = new Date().toLocaleString('es-ES', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  state.response = txt; state.responseDate = ahora;
+  LS.set('response', txt); LS.set('responseDate', ahora);
+  const rt = document.getElementById('responseText'); if (rt) rt.textContent = txt;
+  cargarRespuesta();
+  toast('Tu respuesta guardada 💜');
+}
+
+function editarRespuesta() {
+  const inp = document.getElementById('cartaResponse');
+  if (inp) inp.value = state.response || '';
+  document.getElementById('responseSaved').style.display = 'none';
+  document.getElementById('responseForm').style.display = 'block';
+}
+
+function borrarRespuesta() {
+  Swal.fire({ title: '¿Borrar tu respuesta?', showCancelButton: true, confirmButtonText: 'Sí, borrar', cancelButtonText: 'No', confirmButtonColor: '#f87171' })
+    .then(r => {
+      if (r.isConfirmed) {
+        state.response = ''; state.responseDate = null;
+        LS.set('response', ''); LS.set('responseDate', null);
+        document.getElementById('cartaResponse').value = '';
+        cargarRespuesta();
+        toast('Borrada 🗑');
+      }
+    });
+}
+
+/* ============================================================
+   NAVEGACIÓN
+============================================================ */
+function navTo(sec) {
+  document.querySelectorAll('.section-page').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('sec-' + sec);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.nav-item[data-sec]').forEach(b => b.classList.toggle('active', b.dataset.sec === sec));
+  document.querySelector('.app-main').scrollTo({ top: 0, behavior: 'smooth' });
+}
+function openDrawer() { document.getElementById('drawerOverlay').classList.add('open'); document.getElementById('drawer').classList.add('open'); }
+function closeDrawer() { document.getElementById('drawerOverlay').classList.remove('open'); document.getElementById('drawer').classList.remove('open'); }
+function nosTab(panel, btn) {
+  document.querySelectorAll('.nos-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nos-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + panel)?.classList.add('active');
+  if (btn) btn.classList.add('active');
+  else document.querySelectorAll('.nos-tab').forEach(b => { if (b.getAttribute('onclick')?.includes("'" + panel + "'")) b.classList.add('active'); });
+}
+
+/* ============================================================
+   JUEGOS
+============================================================ */
+let gameIntervals = [];
+function limpiarIntervalos() { gameIntervals.forEach(id => clearInterval(id)); gameIntervals = []; }
+
+const QUIZ = [
+  { q: '¿Cómo llama Jhamir a Evolet casi siempre?', opts: ['Evita', 'Evi', 'Nena', 'Amor'], ans: 1, note: 'Casi siempre "Evi".' },
+  { q: '¿Qué se le cayó a Jhamir en el short mientras comía?', opts: ['Un helado', 'Atún con galleta', 'Café', 'Arroz'], ans: 1, note: 'Atún con galleta. Un clásico ya.' },
+  { q: '¿Cuál de estos es un apodo real que Jhamir usa con Evolet?', opts: ['Princesa', 'Enana emo', 'Cielo', 'Muñeca'], ans: 1, note: '"Enana emo", junto con "pulga aventurera".' },
+  { q: '¿Cómo se llama el personaje de Alien Stage que le gusta a Evolet?', opts: ['Till', 'Ivan', 'Luka', 'Kraz'], ans: 1, note: 'Ivan, uno de sus favoritos de Alien Stage.' },
+  { q: '¿En qué idioma le escribió Jhamir "aishiteru" a Evolet?', opts: ['Coreano', 'Chino', 'Japonés', 'Inglés'], ans: 2, note: '"Aishiteru" es japonés.' },
+  { q: '¿Con qué superhéroe se identifica más Jhamir?', opts: ['Iron Man', 'Batman', 'Hulk', 'Spider-Man'], ans: 3, note: '🕷️ Spider-Man.' },
+  { q: '¿Cuál es el deporte favorito de Jhamir?', opts: ['Básquet', 'Fútbol', 'Tenis', 'Natación'], ans: 1, note: 'Fútbol — Ronaldo, Messi, Neymar, Ronaldinho, Kaká.' },
+  { q: '¿Qué apodo empezó Jhamir y Evolet terminó siguiendo la broma?', opts: ['Pulga aventurera', 'Gatita', 'Bebé', 'Corazón'], ans: 0, note: '"Pulga aventurera" — ella misma siguió la broma después.' },
+  { q: '¿En qué app/juego están los OCs de Evolet?', opts: ['Los Sims', 'Gacha Life / Gacha Club', 'Roblox', 'Minecraft'], ans: 1, note: 'Gacha Life / Gacha Club — habla seguido de sus OCs ahí.' },
+  { q: '¿Cuál de estos es un gusto confirmado de Evolet?', opts: ['Pokémon', 'Chiikawa', 'My Little Pony', 'Barbie'], ans: 1, note: 'Chiikawa está en su lista de gustos.' }
+];
+
+function juegoTrivia() {
+  let idx = 0; let score = 0;
+  const shuffled = [...QUIZ].sort(() => Math.random() - 0.5);
+  const showQ = () => {
+    if (idx >= shuffled.length) return mostrarResultado();
+    const q = shuffled[idx];
+    const progHTML = shuffled.map((_,i) => `<div class="quiz-dot ${i<idx?'done':i===idx?'current':''}"></div>`).join('');
+    Swal.fire({
+      title: `Pregunta ${idx+1} de ${shuffled.length}`,
+      html: `<div class="quiz-progress">${progHTML}</div>
+             <div style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:18px;">${q.q}</div>
+             ${q.opts.map((o,i) => `<button class="quiz-opt" id="opt${i}" onclick="elegirOpt(${i},${q.ans},'${q.note.replace(/'/g,"&#39;")}',${idx+1})">${o}</button>`).join('')}`,
+      showConfirmButton: false, allowOutsideClick: false
+    });
+  };
+  window.elegirOpt = (i, ans, note, num) => {
+    document.querySelectorAll('.quiz-opt').forEach(b => b.style.pointerEvents = 'none');
+    const b = document.getElementById('opt' + i); const c = document.getElementById('opt' + ans);
+    if (i === ans) { b.classList.add('correct'); score++; } else { b.classList.add('wrong'); c.classList.add('correct'); }
+    setTimeout(() => {
+      idx++;
+      Swal.fire({
+        title: i === ans ? '✅ ¡Correcto!' : '❌ Incorrecto',
+        html: `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;">${note}</div>`,
+        confirmButtonText: idx < shuffled.length ? 'Siguiente →' : 'Ver resultado',
+        timer: 2000, timerProgressBar: true
+      }).then(() => showQ());
+    }, 700);
+  };
+  const mostrarResultado = () => {
+    if (score > state.highScore) { state.highScore = score; LS.set('highScore', score); actualizarScoreCard(); }
+    const perc = Math.round((score / shuffled.length) * 100);
+    let emoji = perc >= 80 ? '🏆' : perc >= 50 ? '💜' : '😅';
+    Swal.fire({
+      title: `${emoji} Resultado final`,
+      html: `<div style="font-size:2rem;font-weight:700;color:var(--purple);margin:8px 0;">${score}/${shuffled.length}</div>
+             <div style="font-size:0.9rem;color:var(--text2);">${perc}% de respuestas correctas</div>
+             <div style="font-size:0.8rem;margin-top:10px;color:var(--text2);font-style:italic;">${perc >= 80 ? '¡Nos conocemos muy bien! 💜' : perc >= 50 ? 'Bien bien, pero hay más que aprender jsjs' : 'Toca conocernos mejor 😄'}</div>`,
+      confirmButtonText: 'Jugar de nuevo', showCancelButton: true, cancelButtonText: 'Cerrar'
+    }).then(r => { if (r.isConfirmed) { idx = 0; score = 0; showQ(); } });
+  };
+  showQ();
+}
+
+function actualizarScoreCard() {
+  const card = document.getElementById('scoreCard'); const disp = document.getElementById('scoreDisplay');
+  if (state.highScore > 0) { if (card) card.style.display = 'block'; if (disp) disp.textContent = `${state.highScore}/${QUIZ.length}`; }
+}
+
+const RULETA_PREGUNTAS = [
+  '¿Quién de los dos manda el primer "jsjs" en la conversación?',
+  '¿Quién sería más dramático si el otro no responde por 1 hora?',
+  '¿A quién le da más pena decir "te quiero" primero?',
+  '¿Quién de los dos tiene más stickers raros guardados?',
+  '¿Quién se queda despierto hasta más tarde?',
+  '¿Quién de los dos diría "cuídate" primero si el otro se enferma?',
+  '¿Quién haría más drama si se quedan sin internet?',
+  '¿Quién se pone más sentimental en las madrugadas?',
+  '¿Quién llamaría al otro "enana/enano" con más cariño?',
+  'Cuenten un momento en que el otro los hizo reír sin querer.',
+  '¿Qué frase o palabra del otro recuerdan más?',
+  '¿Cuál fue la primera cosa que pensaron del otro?',
+  '¿Quién sería más difícil de convencer de salir?',
+  '¿Quién manda más mensajes que después borra?',
+  '¿Quién gasta más batería hablando de sus gustos (gacha, fútbol, etc.)?'
+];
+
+function juegoRuleta() {
+  let idx = 0; let interval;
+  const pregunta = RULETA_PREGUNTAS[Math.floor(Math.random() * RULETA_PREGUNTAS.length)];
+  Swal.fire({
+    title: '🎡 Ruleta de preguntas',
+    html: `<div style="font-size:0.82rem;color:var(--text2);margin-bottom:14px;">Se detiene sola. Respondan juntos en voz. jsjs</div>
+           <div class="ruleta-item" id="ruletaItem">Girando...</div>
+           <div style="margin-top:16px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div id="ruletaBarra" style="height:100%;width:0%;background:var(--purple);border-radius:2px;transition:width 0.05s linear;"></div></div>`,
+    showConfirmButton: false, allowOutsideClick: false,
+    didOpen: () => {
+      let t = 0; const dur = 2500; let spd = 80;
+      const tick = () => {
+        t += spd;
+        const pct = Math.min((t / dur) * 100, 100);
+        document.getElementById('ruletaBarra').style.width = pct + '%';
+        document.getElementById('ruletaItem').textContent = RULETA_PREGUNTAS[idx % RULETA_PREGUNTAS.length];
+        idx++;
+        if (t >= dur) {
+          clearInterval(interval);
+          const el = document.getElementById('ruletaItem');
+          el.textContent = pregunta; el.style.borderColor = 'rgba(155,125,248,0.5)'; el.style.color = 'var(--text)';
+          setTimeout(() => {
+            Swal.close();
+            Swal.fire({
+              title: '💜 Su pregunta',
+              html: `<div style="font-size:1rem;font-style:italic;line-height:1.7;padding:10px 0;">"${pregunta}"</div>`,
+              confirmButtonText: 'Otra ronda', showCancelButton: true, cancelButtonText: 'Cerrar'
+            }).then(r => { if (r.isConfirmed) juegoRuleta(); });
+          }, 600);
+          return;
+        }
+        if (t > dur * 0.6) { spd = 80 + Math.floor((t / dur) * 200); clearInterval(interval); interval = setInterval(tick, spd); }
+      };
+      interval = setInterval(tick, spd);
+    },
+    willClose: () => clearInterval(interval)
+  });
+}
+
+const VR_VERDAD = [
+  '¿Cuál fue el momento exacto en que dijiste "hmm, me gusta esta persona"?',
+  '¿Algo que el otro hace y que te parece bonito pero nunca lo has dicho?',
+  '¿Con qué frase del otro te quedaste pensando?',
+  '¿Qué fue lo primero que te llamó la atención del otro?',
+  '¿Hay algo que siempre quisiste preguntar pero no te atreviste?',
+  '¿En qué momento dijiste "no quiero que esta persona se vaya de mi vida"?'
+];
+const VR_RETO = [
+  'Manda un audio de voz diciendo "tkm" de la manera más dramática posible 🎭',
+  'Escribe una frase cursi y no la borres por 10 minutos.',
+  'Envía el sticker más random que tengas ahora mismo.',
+  'Di tres cosas que te gustan del otro, en voz alta y sin pensarlo.',
+  'Manda un mensaje de buenas noches ahora mismo, aunque no sea de noche.',
+  'Canta el coro de la última canción que escuchaste (o intenta jsjs).'
+];
+
+function juegoVerdadReto() {
+  Swal.fire({
+    title: '🃏 Verdad o Reto',
+    html: `<div style="font-size:0.85rem;color:var(--text2);margin-bottom:20px;">¿Cuál eligen?</div>
+           <div style="display:flex;gap:12px;"><button class="btn-primary" style="flex:1" onclick="window._vr('v')">💬 Verdad</button><button class="btn-secondary" style="flex:1" onclick="window._vr('r')">🎯 Reto</button></div>`,
+    showConfirmButton: false, allowOutsideClick: true
+  });
+  window._vr = (tipo) => {
+    Swal.close();
+    const lista = tipo === 'v' ? VR_VERDAD : VR_RETO;
+    const item = lista[Math.floor(Math.random() * lista.length)];
+    setTimeout(() => {
+      Swal.fire({
+        title: tipo === 'v' ? '💬 Verdad' : '🎯 Reto',
+        html: `<div style="font-size:0.95rem;line-height:1.7;padding:8px 0;">"${item}"</div>`,
+        confirmButtonText: 'Otra', showCancelButton: true, cancelButtonText: 'Cerrar'
+      }).then(r => { if (r.isConfirmed) juegoVerdadReto(); });
+    }, 100);
+  };
+}
+
+const COMPLETA = [
+  { frase: 'La razón por la que siempre termino hablando contigo es ___', pista: 'Algo tuyo.' },
+  { frase: 'Si tuviera que describirte en una sola palabra sería ___', pista: 'Solo una.' },
+  { frase: 'Cuando dices "jsjs" en realidad significa ___', pista: 'O no. jsjs.' },
+  { frase: 'Lo primero que pienso cuando te veo conectado/a es ___', pista: '.' },
+  { frase: 'La cosa más random que hemos hablado fue de ___', pista: 'Puede ser gacha o fútbol.' },
+  { frase: 'Si tuviéramos un lema de pareja sería ___', pista: 'Que los represente.' }
+];
+
+function juegoCompleta() {
+  const q = COMPLETA[Math.floor(Math.random() * COMPLETA.length)];
+  Swal.fire({
+    title: '✏️ Completa la frase',
+    html: `<div style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.6;">"${q.frase}"</div>
+           <div style="font-size:0.78rem;color:var(--text2);margin-bottom:14px;font-style:italic;">${q.pista}</div>
+           <textarea class="swal2-textarea" id="swal-ct" placeholder="Escribe tu respuesta..." rows="3" style="width:100%;"></textarea>`,
+    showCancelButton: true, confirmButtonText: 'Otra frase', cancelButtonText: 'Cerrar'
+  }).then(r => { if (r.isConfirmed) juegoCompleta(); });
+}
+
+/* ============================================================
+   FRASES GUARDADAS
+============================================================ */
+function guardarFrasePropia() {
+  const txt = document.getElementById('frasePropia')?.value?.trim();
+  if (!txt) { toast('Escribe una frase primero'); return; }
+  state.frases.unshift({ texto: txt, fecha: new Date().toLocaleDateString('es-ES'), autor: state.whoami || null });
+  if (state.frases.length > 20) state.frases.pop();
+  LS.set('frasesGuardadas', state.frases);
+  document.getElementById('frasePropia').value = '';
+  renderFrasesGuardadas();
+  toast('Frase guardada 💜');
+}
+
+function renderFrasesGuardadas() {
+  const container = document.getElementById('frasesGuardadasList');
+  if (!container) return;
+  if (state.frases.length === 0) { container.innerHTML = ''; return; }
+  container.innerHTML = state.frases.map((f, i) => `
+    <div class="memory-card">
+      <div class="memory-date">${f.fecha || ''}</div>
+      <div style="font-size:0.88rem;line-height:1.6;font-style:italic;">"${escHTML(f.texto)}"</div>
+      <button class="memory-del" onclick="borrarFrase(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function borrarFrase(i) {
+  state.frases.splice(i, 1);
+  LS.set('frasesGuardadas', state.frases);
+  renderFrasesGuardadas();
+  toast('Frase eliminada');
+}
+
+/* ============================================================
+   RECUERDOS (con autor)
+============================================================ */
+function guardarRecuerdo() {
+  const titulo = document.getElementById('memTitulo')?.value?.trim();
+  const desc = document.getElementById('memDesc')?.value?.trim();
+  const fecha = document.getElementById('memFecha')?.value;
+  const img = document.getElementById('memImg')?.value?.trim();
+  if (!titulo) { toast('Agrega un título'); return; }
+  state.recuerdos.unshift({ titulo, desc, fecha, img, id: Date.now(), autor: state.whoami || null });
+  LS.set('recuerdos', state.recuerdos);
+  document.getElementById('memTitulo').value = '';
+  document.getElementById('memDesc').value = '';
+  document.getElementById('memFecha').value = '';
+  document.getElementById('memImg').value = '';
+  renderRecuerdos();
+  toast('Recuerdo guardado 📸');
+}
+
+function renderRecuerdos() {
+  const container = document.getElementById('recuerdosList');
+  if (!container) return;
+  if (state.recuerdos.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-icon">📷</div>Aún no hay recuerdos. ¡Agrega el primero!</div>`; return; }
+  container.innerHTML = state.recuerdos.map((m, i) => `
+    <div class="memory-card">
+      <button class="memory-del" onclick="borrarRecuerdo(${i})">✕</button>
+      ${m.fecha ? `<div class="memory-date">${new Date(m.fecha+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'})}</div>` : ''}
+      <div class="memory-title">${escHTML(m.titulo)}</div>
+      ${m.desc ? `<div class="memory-desc">${escHTML(m.desc)}</div>` : ''}
+      ${m.img ? `<img class="memory-img" src="${escHTML(m.img)}" alt="Recuerdo" onerror="this.style.display='none'">` : ''}
+      ${m.autor ? `<div class="memory-author">— agregado por ${m.autor === 'jhamir' ? escHTML(state.names.n1) : escHTML(state.names.n2)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function borrarRecuerdo(i) {
+  const rec = state.recuerdos[i];
+  if (rec && rec.autor && state.whoami && rec.autor !== state.whoami && !esAdmin()) {
+    Swal.fire({
+      title: 'Este recuerdo no es tuyo',
+      html: `Lo agregó <strong>${rec.autor === 'jhamir' ? escHTML(state.names.n1) : escHTML(state.names.n2)}</strong>. Solo esa persona (o Jhamir) puede borrarlo.`,
+      confirmButtonText: 'Ok'
+    });
+    return;
+  }
+  Swal.fire({ title: '¿Borrar este recuerdo?', showCancelButton: true, confirmButtonText: 'Borrar', cancelButtonText: 'No', confirmButtonColor: '#f87171' })
+    .then(r => { if (r.isConfirmed) { state.recuerdos.splice(i, 1); LS.set('recuerdos', state.recuerdos); renderRecuerdos(); toast('Recuerdo eliminado'); } });
+}
+
+/* ============================================================
+   FECHAS IMPORTANTES
+============================================================ */
+function guardarFecha() {
+  const nombre = document.getElementById('fechaNombre')?.value?.trim();
+  const fecha = document.getElementById('fechaDate')?.value;
+  const tipo = document.getElementById('fechaTipo')?.value;
+  if (!nombre || !fecha) { toast('Completa nombre y fecha'); return; }
+  state.fechas.push({ id: Date.now(), nombre, fecha, tipo });
+  LS.set('fechas', state.fechas);
+  document.getElementById('fechaNombre').value = '';
+  document.getElementById('fechaDate').value = '';
+  renderFechas();
+  toast('Fecha guardada 📅');
+}
+
+function renderFechas() {
+  const container = document.getElementById('fechasList');
+  if (!container) return;
+  if (state.fechas.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div>No hay fechas aún.</div>`; return; }
+  const ahora = new Date();
+  const sorted = [...state.fechas].sort((a,b) => diasHastaFecha(a.fecha, ahora) - diasHastaFecha(b.fecha, ahora));
+  container.innerHTML = sorted.map((f) => {
+    const dias = diasHastaFecha(f.fecha, ahora);
+    const dotClass = `fecha-dot-${f.tipo || 'purple'}`;
+    let diasTxt = dias === 0 ? '🎉 ¡Hoy!' : dias === 1 ? '🎊 Mañana' : `En ${dias} días`;
+    const fechaFmt = f.fecha ? new Date(f.fecha+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'long'}) : '';
+    return `<div class="fecha-card">
+      <div class="fecha-dot ${dotClass}"></div>
+      <div class="fecha-info"><div class="fecha-name">${escHTML(f.nombre)}</div>${fechaFmt ? `<div class="fecha-date">${fechaFmt}</div>` : ''}<div class="fecha-days">${diasTxt}</div></div>
+      <button class="fecha-del" onclick="borrarFecha(${state.fechas.findIndex(x=>x.id===f.id)})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function diasHastaFecha(fechaStr, ahora) {
+  if (!fechaStr) return 9999;
+  const f = new Date(fechaStr + 'T12:00:00');
+  const anio = ahora.getFullYear();
+  let proxima = new Date(anio, f.getMonth(), f.getDate());
+  if (proxima < ahora) proxima.setFullYear(anio + 1);
+  return Math.ceil((proxima - ahora) / 86400000);
+}
+
+function borrarFecha(i) {
+  Swal.fire({ title: '¿Borrar esta fecha?', showCancelButton: true, confirmButtonText: 'Borrar', cancelButtonText: 'No', confirmButtonColor: '#f87171' })
+    .then(r => { if (r.isConfirmed) { state.fechas.splice(i, 1); LS.set('fechas', state.fechas); renderFechas(); toast('Fecha eliminada'); } });
+}
+
+/* ============================================================
+   APODOS
+============================================================ */
+function renderApodos() {
+  const wrap = document.getElementById('apodosList');
+  if (!wrap) return;
+  if (!state.apodos.length) { wrap.innerHTML = '<div class="empty-state" style="padding:16px;">Sin apodos guardados aún.</div>'; return; }
+  wrap.innerHTML = state.apodos.map((a,i) => `<div class="chip">${escHTML(a)}<button onclick="eliminarApodo(${i})">✕</button></div>`).join('');
+}
+function agregarApodo() {
+  const v = document.getElementById('apodoNuevo')?.value?.trim();
+  if (!v) { toast('Escribe un apodo primero'); return; }
+  state.apodos.push(v); LS.set('apodos', state.apodos);
+  document.getElementById('apodoNuevo').value = '';
+  renderApodos(); toast('Apodo agregado 🏷️');
+}
+function eliminarApodo(i) { state.apodos.splice(i,1); LS.set('apodos', state.apodos); renderApodos(); }
+
+/* ============================================================
+   CÁPSULA DEL TIEMPO
+============================================================ */
+function guardarCapsula() {
+  const texto = document.getElementById('capsulaTexto')?.value?.trim();
+  const fecha = document.getElementById('capsulaFecha')?.value;
+  if (!texto || !fecha) { toast('Completa el mensaje y la fecha'); return; }
+  state.capsulas.unshift({ id: Date.now(), texto, fechaApertura: fecha, fechaCreacion: new Date().toLocaleDateString('es-ES'), autor: state.whoami || null });
+  LS.set('capsulas', state.capsulas);
+  document.getElementById('capsulaTexto').value = '';
+  document.getElementById('capsulaFecha').value = '';
+  renderCapsulas();
+  toast('Cápsula guardada ⏳');
+}
+
+function renderCapsulas() {
+  const wrap = document.getElementById('capsulasList');
+  if (!wrap) return;
+  if (!state.capsulas.length) { wrap.innerHTML = '<div class="empty-state" style="padding:16px;"><div class="empty-icon">⏳</div>No hay cápsulas todavía.</div>'; return; }
+  const hoy = new Date();
+  wrap.innerHTML = state.capsulas.map((c,i) => {
+    const abre = new Date(c.fechaApertura + 'T00:00:00');
+    const desbloqueada = hoy >= abre;
+    const fechaFmt = abre.toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
+    return `<div class="capsula-card ${desbloqueada?'':'capsula-locked'}">
+      <div class="capsula-status ${desbloqueada?'unlocked':'locked'}">${desbloqueada ? '🔓 Desbloqueada' : '🔒 Se abre el ' + fechaFmt}</div>
+      <div class="capsula-fecha">Escrita el ${c.fechaCreacion}</div>
+      <div class="capsula-texto ${desbloqueada?'':'capsula-blur'}">${escHTML(c.texto)}</div>
+      <div style="margin-top:10px;"><button class="btn-ghost btn-ghost-danger" onclick="eliminarCapsula(${i})">Eliminar</button></div>
+    </div>`;
+  }).join('');
+}
+function eliminarCapsula(i) { state.capsulas.splice(i,1); LS.set('capsulas', state.capsulas); renderCapsulas(); }
+
+/* ============================================================
+   PREGUNTA DEL DÍA / RACHA
+============================================================ */
+function renderPreguntaDia() {
+  const start = new Date(2026,0,1);
+  const now = new Date();
+  const dayOfYear = Math.floor((now - start) / 86400000);
+  const idx = ((dayOfYear % PREGUNTAS_DIA.length) + PREGUNTAS_DIA.length) % PREGUNTAS_DIA.length;
+  const el = document.getElementById('preguntaDiaText');
+  if (el) el.textContent = PREGUNTAS_DIA[idx];
+}
+
+function actualizarRacha() {
+  const hoyStr = new Date().toDateString();
+  let racha = LS.get('racha', { count: 0, lastVisit: null });
+  if (racha.lastVisit !== hoyStr) {
+    const last = racha.lastVisit ? new Date(racha.lastVisit) : null;
+    const hoy = new Date(hoyStr);
+    if (last) {
+      const diffDays = Math.round((hoy - last) / 86400000);
+      if (diffDays === 1) racha.count += 1; else if (diffDays > 1) racha.count = 1; else racha.count = Math.max(racha.count, 1);
+    } else { racha.count = 1; }
+    racha.lastVisit = hoyStr;
+    LS.set('racha', racha);
+  }
+  const badge = document.getElementById('headerStreak');
+  if (badge) { if (racha.count > 1) { badge.style.display = 'inline-block'; badge.textContent = `🔥 ${racha.count}d`; } else { badge.style.display = 'none'; } }
+}
+
+/* ============================================================
+   NUESTRA IA (generador de plantillas — no un modelo real)
+============================================================ */
+let iaCategoriaActual = null;
+let iaLongitudActual = 'normal';
+
+function renderIaCatGrid() {
+  const wrap = document.getElementById('iaCatGrid');
+  if (!wrap) return;
+  wrap.innerHTML = Object.keys(IA_TEMPLATES).map(key =>
+    `<div class="ia-cat-btn ${key===iaCategoriaActual?'selected':''}" onclick="iaSeleccionarCategoria('${key}')">${IA_TEMPLATES[key].label}</div>`
+  ).join('');
+}
+function iaSeleccionarCategoria(key) { iaCategoriaActual = key; renderIaCatGrid(); iaGenerar(); }
+function iaSetLen(len) {
+  iaLongitudActual = len;
+  const corto = document.getElementById('iaLenBtnCorto');
+  const normal = document.getElementById('iaLenBtnNormal');
+  if (corto) { corto.classList.toggle('btn-primary', len==='corto'); corto.classList.toggle('btn-secondary', len!=='corto'); }
+  if (normal) { normal.classList.toggle('btn-primary', len==='normal'); normal.classList.toggle('btn-secondary', len!=='normal'); }
+  if (iaCategoriaActual) iaGenerar();
+}
+function iaGenerar() {
+  const out = document.getElementById('iaOutput');
+  if (!iaCategoriaActual) { if (out) out.textContent = 'Elige una categoría arriba ↑'; return; }
+  const banco = IA_TEMPLATES[iaCategoriaActual][iaLongitudActual] || IA_TEMPLATES[iaCategoriaActual].normal;
+  const msg = banco[Math.floor(Math.random() * banco.length)];
+  if (out) out.textContent = msg;
+}
+function iaGuardarComoFrase() {
+  const out = document.getElementById('iaOutput');
+  const txt = out?.textContent?.trim();
+  if (!txt || txt === 'Elige una categoría arriba ↑') { toast('Genera un mensaje primero'); return; }
+  state.frases.unshift({ texto: txt, fecha: new Date().toLocaleDateString('es-ES'), autor: state.whoami || null });
+  if (state.frases.length > 20) state.frases.pop();
+  LS.set('frasesGuardadas', state.frases);
+  toast('Guardada como frase 💾');
+}
+
+/* ============================================================
+   MEMORIA DE ARCHIVOS — estadísticas básicas reales, no IA real
+============================================================ */
+function procesarArchivoMemoria(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+
+  if (ext === 'pdf' || ext === 'docx') {
+    Swal.fire({
+      title: 'Formato no incluido aún',
+      html: `Los archivos <strong>.${ext}</strong> no se procesan en esta versión — necesitarían una librería adicional (o un backend) que no está incluida aquí. Puedes exportar la conversación como <strong>.txt</strong> y subirla así.`,
+      confirmButtonText: 'Entendido'
+    });
+    event.target.value = '';
+    return;
+  }
+  if (!['txt','json','csv'].includes(ext)) { toast('Formato no reconocido'); event.target.value = ''; return; }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const content = e.target.result;
+    let stats = null;
+    try {
+      if (ext === 'txt') stats = analizarTexto(content);
+      else if (ext === 'json') stats = analizarJSON(JSON.parse(content));
+      else if (ext === 'csv') stats = analizarCSV(content);
+    } catch (err) { toast('No se pudo leer el contenido del archivo'); return; }
+    state.memoriaArchivo = { nombre: file.name, tipo: ext, fecha: new Date().toLocaleString('es-ES'), stats };
+    LS.set('memoriaArchivo', state.memoriaArchivo);
+    renderMemFile();
+    toast('Archivo procesado 📄');
+  };
+  reader.onerror = () => toast('No se pudo leer el archivo');
+  reader.readAsText(file);
+}
+
+function analizarTexto(content) {
+  const lineas = content.split(/\r?\n/).filter(l => l.trim());
+  const stopwords = new Set(['de','la','que','el','en','y','a','los','se','del','las','un','por','con','no','una','su','para',
+    'es','al','lo','como','mas','más','pero','sus','le','ya','o','fue','este','ha','si','sí','porque','esta','son','entre',
+    'cuando','muy','sin','sobre','tambien','también','me','hasta','hay','donde','han','quien','estan','están','estado',
+    'desde','todo','nos','durante','todos','uno','les','ni','contra','otros','ese','eso','ante','ellos','esto','mi','antes',
+    'algunos','unos','yo','otro','otras','otra','tanto','esa','estos','mucho','quienes','nada','muchos','cual','sea','poco',
+    'ella','estar','estas','algunas','algo','nosotros','tu','te','ti','tus','ellas']);
+  const freq = {};
+  const remitentes = {};
+  const patronRemitente = /^\[?.*?\]?\s*([A-Za-zÀ-ÿ.]{2,20})\s*:\s*.+/;
+  lineas.forEach(linea => {
+    const palabras = linea.toLowerCase().replace(/[^\wáéíóúñü\s]/gi, ' ').split(/\s+/).filter(w => w.length > 2 && !stopwords.has(w));
+    palabras.forEach(w => { freq[w] = (freq[w]||0) + 1; });
+    const m = linea.match(patronRemitente);
+    if (m && m[1]) { const nombre = m[1].trim(); remitentes[nombre] = (remitentes[nombre]||0) + 1; }
+  });
+  const topWords = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0,8).map(([w,c]) => `${w} (${c})`);
+  const topRemitentes = Object.entries(remitentes).sort((a,b) => b[1]-a[1]).slice(0,5).map(([n,c]) => `${n}: ${c} líneas`);
+  return { lineas: lineas.length, palabrasTop: topWords, remitentes: topRemitentes };
+}
+
+function analizarJSON(data) {
+  if (Array.isArray(data)) return { tipo: 'array', registros: data.length, claves: (data[0] && typeof data[0] === 'object') ? Object.keys(data[0]).slice(0,10) : [] };
+  if (data && typeof data === 'object') return { tipo: 'objeto', claves: Object.keys(data).slice(0,15) };
+  return { tipo: 'valor simple', claves: [] };
+}
+
+function analizarCSV(content) {
+  const lineas = content.split(/\r?\n/).filter(l => l.trim());
+  const header = lineas[0] ? lineas[0].split(',').map(h=>h.trim()) : [];
+  return { filas: Math.max(0, lineas.length - 1), columnas: header };
+}
+
+function renderMemFile() {
+  const wrap = document.getElementById('memFileResult');
+  if (!wrap) return;
+  const m = state.memoriaArchivo;
+  if (!m) { wrap.innerHTML = ''; return; }
+  let statsHtml = '';
+  if (m.tipo === 'txt') {
+    statsHtml = `${m.stats.lineas} líneas detectadas.<br>Palabras frecuentes: ${escHTML(m.stats.palabrasTop.join(', ') || '—')}.` +
+      (m.stats.remitentes.length ? `<br>Posibles remitentes: ${escHTML(m.stats.remitentes.join(' · '))}` : '');
+  } else if (m.tipo === 'json') {
+    statsHtml = m.stats.tipo === 'array'
+      ? `${m.stats.registros} registros detectados. Claves: ${escHTML(m.stats.claves.join(', ') || '—')}`
+      : `Objeto con claves: ${escHTML(m.stats.claves.join(', ') || '—')}`;
+  } else if (m.tipo === 'csv') {
+    statsHtml = `${m.stats.filas} filas detectadas. Columnas: ${escHTML(m.stats.columnas.join(', ') || '—')}`;
+  }
+  wrap.innerHTML = `<div class="memfile-card">
+    <div class="memfile-name">📄 ${escHTML(m.nombre)}</div>
+    <div class="memfile-stat">${statsHtml}</div>
+    <div class="memfile-stat" style="opacity:0.7;">Subido: ${m.fecha}</div>
+    <div style="margin-top:10px;"><button class="btn-ghost btn-ghost-danger" onclick="eliminarMemoriaArchivo()">Eliminar archivo</button></div>
+  </div>`;
+}
+
+function eliminarMemoriaArchivo() {
+  state.memoriaArchivo = null;
+  LS.del('memoriaArchivo');
+  const inp = document.getElementById('memFileInput'); if (inp) inp.value = '';
+  renderMemFile();
+  toast('Memoria eliminada');
+}
+
+/* ============================================================
+   TEMAS VISUALES
+============================================================ */
+function renderThemeGrid() {
+  const wrap = document.getElementById('themeGrid');
+  if (!wrap) return;
+  wrap.innerHTML = Object.keys(THEMES).map(key => {
+    const t = THEMES[key];
+    return `<div class="theme-swatch ${key===state.theme?'selected':''}" id="themeSwatch_${key}" onclick="aplicarTema('${key}')">
+      <div class="theme-swatch-dots">
+        <div class="theme-swatch-dot" style="background:${t.vars['--purple']}"></div>
+        <div class="theme-swatch-dot" style="background:${t.vars['--rose']}"></div>
+        <div class="theme-swatch-dot" style="background:${t.vars['--gold']}"></div>
+      </div>
+      <div class="theme-swatch-name">${t.name}</div>
+    </div>`;
+  }).join('');
+}
+function aplicarTemaSilencioso(key) {
+  const t = THEMES[key]; if (!t) return;
+  Object.keys(t.vars).forEach(varName => document.documentElement.style.setProperty(varName, t.vars[varName]));
+}
+function aplicarTema(key) {
+  const t = THEMES[key]; if (!t) return;
+  aplicarTemaSilencioso(key);
+  state.theme = key; LS.set('theme', key);
+  document.querySelectorAll('.theme-swatch').forEach(el => el.classList.remove('selected'));
+  document.getElementById('themeSwatch_' + key)?.classList.add('selected');
+  toast('Tema aplicado: ' + t.name);
+}
+
+/* ============================================================
+   COPIA DE SEGURIDAD — exportar / importar
+============================================================ */
+function exportarDatos() {
+  const payload = { app: 'jhamir-y-evolet', version: DATA_VERSION, exportedAt: new Date().toISOString(), data: {} };
+  ALL_KEYS.forEach(k => { payload.data[k] = LS.get(k, null); });
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `jhamir-y-evolet-backup-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Copia de seguridad descargada 📦');
+}
+
+function importarDatos(event) {
+  if (!requiereAdmin()) { event.target.value = ''; return; }
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    let payload;
+    try { payload = JSON.parse(e.target.result); } catch (err) { toast('El archivo no es un backup válido'); return; }
+    if (!payload || !payload.data || payload.app !== 'jhamir-y-evolet') { toast('Este archivo no parece ser un backup de esta página'); return; }
+    Swal.fire({
+      title: '¿Importar esta copia?',
+      html: `<div style="font-size:0.85rem;color:var(--text2);">Esto reemplaza los datos actuales de este dispositivo con los del archivo${payload.exportedAt ? ' (del ' + new Date(payload.exportedAt).toLocaleDateString('es-ES') + ')' : ''}.<br><br><strong>Lo que tengas ahora se perderá si no lo exportaste antes.</strong></div>`,
+      showCancelButton: true, confirmButtonText: 'Sí, importar', cancelButtonText: 'Cancelar', confirmButtonColor: '#9b7df8'
+    }).then(r => {
+      if (r.isConfirmed) {
+        Object.keys(payload.data).forEach(k => { if (payload.data[k] !== null && payload.data[k] !== undefined) LS.set(k, payload.data[k]); });
+        toast('Datos importados 📦');
+        setTimeout(() => location.reload(), 800);
+      }
+    });
+  };
+  reader.onerror = () => toast('No se pudo leer el archivo');
+  reader.readAsText(file);
+}
+
+/* ============================================================
+   CONFIGURACIÓN
+============================================================ */
+function toggleSetting(key) {
+  const el = document.getElementById('tog-' + key);
+  state.settings[key] = !state.settings[key];
+  el.classList.toggle('on', state.settings[key]);
+}
+
+function guardarConfig() {
+  const n1 = document.getElementById('cfg-nombre1')?.value?.trim();
+  const n2 = document.getElementById('cfg-nombre2')?.value?.trim();
+  const ia = document.getElementById('cfg-ianombre')?.value?.trim();
+  if (n1) state.names.n1 = n1;
+  if (n2) state.names.n2 = n2;
+  if (ia) state.iaNombre = ia;
+  LS.set('names', state.names);
+  LS.set('settings', state.settings);
+  LS.set('iaNombre', state.iaNombre);
+  actualizarNombresUI();
+  actualizarIaNombreUI();
+  toast('Ajustes guardados ⚙️');
+}
+
+function actualizarNombresUI() {
+  const logo = document.getElementById('headerLogo');
+  if (logo) logo.textContent = `${state.names.n1} & ${state.names.n2}`.substring(0,24);
+  actualizarIdentidadUI();
+}
+
+function actualizarIaNombreUI() {
+  const disp = document.getElementById('iaNombreDisplay'); if (disp) disp.textContent = state.iaNombre;
+  const quick = document.getElementById('quickIaLabel'); if (quick) quick.textContent = state.iaNombre;
+}
+
+/* ============================================================
+   RESETEAR TODO — protegido, detallado, con confirmación escrita
+============================================================ */
+function resetearDatos() {
+  if (!requiereAdmin()) return;
+  Swal.fire({
+    title: '¿Borrar TODO?',
+    html: `<div style="font-size:0.85rem;color:var(--text2);text-align:left;">
+      Esto borra permanentemente:<br>
+      • Fecha de inicio y contador<br>
+      • La carta publicada y la respuesta de Evolet<br>
+      • Recuerdos, fechas importantes, frases guardadas<br>
+      • Apodos y cápsulas del tiempo<br>
+      • Racha, puntaje de trivia, tema visual<br>
+      • Memoria de archivos subidos<br>
+      • Ajustes y nombres<br><br>
+      <strong>No se puede deshacer.</strong> Si quieres conservar algo, exporta una copia de seguridad primero.
+    </div>`,
+    showCancelButton: true,
+    confirmButtonText: 'Sí, borrar todo',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#f87171',
+    input: 'text',
+    inputPlaceholder: 'Escribe BORRAR para confirmar',
+    preConfirm: (val) => { if (val !== 'BORRAR') { Swal.showValidationMessage('Escribe exactamente BORRAR (en mayúsculas)'); return false; } }
+  }).then(r => { if (r.isConfirmed) { ALL_KEYS.forEach(k => LS.del(k)); location.reload(); } });
+}
+
+/* ============================================================
+   UTILIDADES
+============================================================ */
+function escHTML(str) {
+  if (!str) return '';
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(str));
+  return d.innerHTML;
+}
+
+function toast(msg) {
+  const c = document.getElementById('toastContainer');
+  if (!c) return;
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3100);
+}
+
+/* ============================================================
+   INICIALIZACIÓN
+============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  crearEstrellas();
+  if (state.accepted && state.startDate) {
+    document.getElementById('proposal').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    initApp();
+  }
+});
+</script>
+</body>
+</html>
