@@ -917,13 +917,22 @@ const ALL_KEYS = ['accepted','startDate','settings','recuerdos','fechas','frases
   'highScore','names','whoami','cartaPublicada','cartaPublicadaFecha','cartaPublicadaTS','cartaVistaTS','apodos','capsulas','memoriaArchivo','theme',
   'racha','iaNombre','dataVersion'];
 
-// De todo lo guardado, esto es lo que SÍ es "de la relación" y se sincroniza
-// entre los dos celulares. Lo que no está aquí (whoami, theme, ajustes,
-// memoria de archivos, racha, cartaVistaTS) es una preferencia de cada
-// dispositivo, no se sincroniza a propósito — si no, el celular de Evolet
-// heredaría el tema, el "quién eres", o el "ya la vi" que quedó en el tuyo.
+// De todo lo guardado, esto es lo que se sincroniza entre los dos celulares.
+// Se quedan SOLO en este dispositivo (a propósito, no por limitación):
+// - whoami: identifica qué persona está usando ESTE celular ahora mismo —
+//   sincronizarlo haría que ambos celulares se peleen por decir quién es quién.
+// - cartaVistaTS: es justo el marcador de "¿YO ya vi la carta?" — si se
+//   sincronizara, en cuanto uno la viera se marcaría como vista para el otro
+//   también, y el puntito rojo de avisos dejaría de servir para algo.
+// - racha: cuenta días seguidos que ESTE celular se abrió — es un dato por
+//   dispositivo, no de la pareja.
+// - memoriaArchivo: puede pesar bastante (análisis de archivos subidos) y
+//   Firestore tiene un límite de 1 MB por documento compartido — si esto se
+//   sincronizara, arriesgaría romper la sincronización de TODO lo demás.
+// - dataVersion: solo es un número interno de control, no dato real.
 const SYNC_KEYS = ['accepted','startDate','recuerdos','fechas','frasesGuardadas','response','responseDate',
-  'highScore','names','cartaPublicada','cartaPublicadaFecha','cartaPublicadaTS','apodos','capsulas'];
+  'highScore','names','cartaPublicada','cartaPublicadaFecha','cartaPublicadaTS','apodos','capsulas',
+  'theme','settings','iaNombre'];
 
 function docCompartido() { return db.collection('parejas').doc(ROOM_ID); }
 
@@ -957,6 +966,12 @@ function marcarCartaVista() {
   }
 }
 
+function renderSettingsUI() {
+  const s = state.settings;
+  document.getElementById('tog-sound')?.classList.toggle('on', s.sound);
+  document.getElementById('tog-anim')?.classList.toggle('on', s.anim);
+}
+
 // Cuando llega un cambio remoto (del otro celular), lo aplicamos a nuestro
 // estado y a nuestro localStorage, y refrescamos solo lo que corresponde.
 // esCargaInicial=true es el primer "empate" al abrir la página (no avisamos
@@ -983,6 +998,7 @@ function aplicarCambiosRemotos(data, esCargaInicial) {
       cargarCartaPublicada(); renderCartaAdminPicker(); cargarRespuesta();
       renderFechas(); renderRecuerdos(); renderFrasesGuardadas(); renderApodos(); renderCapsulas();
       actualizarNombresUI(); iniciarContador();
+      renderSettingsUI(); actualizarIaNombreUI(); aplicarTemaSilencioso(state.theme);
       if (!esCargaInicial) toast('Se actualizó algo desde el otro celular 🔄');
     }
     renderBadgeCartas();
@@ -1005,13 +1021,26 @@ function actualizarEstadoSync(estado) {
 
 let primerSnapshotSync = true;
 
+function manejarBorradoRemoto() {
+  ALL_KEYS.forEach(k => LS.del(k));
+  toast('Se reinició todo desde el otro dispositivo 🔄');
+  setTimeout(() => location.reload(), 1200);
+}
+
 function iniciarSincronizacion() {
   if (!firebaseListo) { actualizarEstadoSync('sin_configurar'); return; }
   actualizarEstadoSync('conectando');
   docCompartido().onSnapshot(
     snap => {
       actualizarEstadoSync('conectado');
-      if (snap.exists) aplicarCambiosRemotos(snap.data(), primerSnapshotSync);
+      if (snap.exists) {
+        aplicarCambiosRemotos(snap.data(), primerSnapshotSync);
+      } else if (state.accepted) {
+        // El documento ya no existe en la nube (alguien le dio "Reiniciar Todo"
+        // en otro dispositivo), pero este dispositivo todavía tiene datos viejos
+        // guardados — los limpiamos aquí también para que quede igual en ambos.
+        manejarBorradoRemoto();
+      }
       primerSnapshotSync = false;
     },
     err => { actualizarEstadoSync('error'); console.warn('Se cortó la sincronización en vivo:', err); }
@@ -1380,9 +1409,7 @@ function initApp() {
   document.getElementById('iniciofrase').textContent = fraseAleatoria();
   document.getElementById('fraseTexto').textContent = FRASES[0];
 
-  const s = state.settings;
-  document.getElementById('tog-sound').classList.toggle('on', s.sound);
-  document.getElementById('tog-anim').classList.toggle('on', s.anim);
+  renderSettingsUI();
   document.getElementById('cfg-nombre1').value = state.names.n1;
   document.getElementById('cfg-nombre2').value = state.names.n2;
   document.getElementById('cfg-ianombre').value = state.iaNombre;
