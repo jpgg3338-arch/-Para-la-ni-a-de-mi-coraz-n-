@@ -77,6 +77,20 @@
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     .stars-wrap { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
     .star-dot { position: absolute; background: white; border-radius: 50%; animation: twinkle linear infinite; }
+    .hearts-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+    .bgheart { position: absolute; bottom: -10%; color: var(--rose); animation: bgHeartRise linear infinite; will-change: transform, opacity; }
+    .bgheart-sparkle { position: absolute; bottom: -10%; width: 4px; height: 4px; border-radius: 50%; background: #fff; animation: bgHeartRise linear infinite; will-change: transform, opacity; }
+    @keyframes bgHeartRise {
+      0% { transform: translate(0, 0); opacity: 0; }
+      10% { opacity: var(--base-op, 0.2); }
+      50% { transform: translate(calc(var(--drift, 0px) * 0.5), -55vh); }
+      90% { opacity: var(--base-op, 0.2); }
+      100% { transform: translate(var(--drift, 0px), -110vh); opacity: 0; }
+    }
+    .hearts-celebrar .bgheart, .hearts-celebrar .bgheart-sparkle { animation-duration: 3.2s !important; }
+    @media (prefers-reduced-motion: reduce) { .bgheart, .bgheart-sparkle { animation: none; opacity: 0.15; bottom: 10%; } }
+    body.anim-off .bgheart, body.anim-off .bgheart-sparkle { animation: none; opacity: 0.12; }
+    body.anim-reduced .bgheart, body.anim-reduced .bgheart-sparkle { animation-duration: 20s !important; }
     @keyframes twinkle { 0%,100% { opacity: var(--base-op); } 50% { opacity: calc(var(--base-op) * 0.2); } }
     .glow-blob { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; }
     .glow-1 { width: 400px; height: 400px; background: rgba(155,125,248,0.08); top: -100px; left: -100px; }
@@ -93,6 +107,13 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .proposal-heart-line { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 18px 0 28px; }
+    .proposal-mascot { display: flex; flex-direction: column; align-items: center; margin: -6px 0 14px; animation: mascotBob 3.2s ease-in-out infinite; filter: drop-shadow(0 8px 14px rgba(240,160,192,0.25)); }
+    .proposal-mascot::after { content: ''; width: 46px; height: 8px; margin-top: 2px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(0,0,0,0.28), transparent 70%); animation: mascotShadow 3.2s ease-in-out infinite; }
+    @keyframes mascotShadow { 0%,100% { transform: scaleX(1); opacity: 0.5; } 50% { transform: scaleX(0.8); opacity: 0.3; } }
+    @keyframes mascotBob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-7px) rotate(2deg); } }
+    @media (prefers-reduced-motion: reduce) { .proposal-mascot { animation: none; } }
+    body.anim-off .proposal-mascot { animation: none; }
     .proposal-heart-line .line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(155,125,248,0.3)); }
     .proposal-heart-line .line:last-child { background: linear-gradient(to left, transparent, rgba(155,125,248,0.3)); }
     .proposal-q { font-size: clamp(1rem, 3vw, 1.15rem); color: var(--text2); line-height: 1.6; margin-bottom: 32px; }
@@ -102,9 +123,13 @@
       background: linear-gradient(135deg, var(--purple), var(--purpleD)); color: white; border: none;
       padding: 14px 36px; border-radius: var(--r); font-size: 1rem; font-weight: 600; cursor: pointer;
       transition: all 0.25s ease; box-shadow: 0 0 20px var(--purpleGlow); letter-spacing: 0.02em;
+      animation: yesBreathe 2.6s ease-in-out infinite;
     }
-    .btn-yes:hover { transform: translateY(-2px); box-shadow: 0 0 32px var(--purpleGlow), 0 4px 20px rgba(0,0,0,0.4); }
-    .btn-yes:active { transform: translateY(0); }
+    @keyframes yesBreathe { 0%,100% { box-shadow: 0 0 20px var(--purpleGlow); } 50% { box-shadow: 0 0 30px var(--purpleGlow); } }
+    .btn-yes:hover { transform: translateY(-2px); box-shadow: 0 0 32px var(--purpleGlow), 0 4px 20px rgba(0,0,0,0.4); animation-play-state: paused; }
+    .btn-yes:active { transform: translateY(0) scale(0.96); animation-play-state: paused; }
+    @media (prefers-reduced-motion: reduce) { .btn-yes { animation: none; } }
+    body.anim-off .btn-yes, body.anim-reduced .btn-yes { animation: none; }
     .btn-no {
       background: var(--surface2); color: var(--text2); border: 1px solid var(--border);
       padding: 14px 28px; border-radius: var(--r); font-size: 1rem; font-weight: 500; cursor: pointer;
@@ -178,8 +203,9 @@
     /* ============ SHARED ============ */
     .page-title { font-size: 1.45rem; font-weight: 700; margin-bottom: 4px; }
     .page-sub { font-size: 0.82rem; color: var(--text2); margin-bottom: 24px; line-height: 1.5; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; margin-bottom: 14px; transition: border-color 0.2s; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; margin-bottom: 14px; transition: border-color 0.2s, transform 0.15s; }
     .card:hover { border-color: rgba(255,255,255,0.12); }
+    .card:active { transform: scale(0.995); }
     .card-title { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text2); margin-bottom: 10px; }
     .tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
     .tag-purple { background: var(--purpleSoft); color: var(--purple); }
@@ -195,14 +221,17 @@
       border-radius: var(--r); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.25s; width: 100%; letter-spacing: 0.01em;
     }
     .btn-primary:hover { box-shadow: 0 0 20px var(--purpleGlow); transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0) scale(0.97); box-shadow: 0 0 10px var(--purpleGlow); }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
     .btn-secondary {
       background: var(--surface2); color: var(--text); border: 1px solid var(--border); padding: 11px 22px;
       border-radius: var(--r); font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.2s; width: 100%;
     }
     .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+    .btn-secondary:active { transform: scale(0.97); background: rgba(255,255,255,0.14); }
     .btn-ghost { background: none; border: none; color: var(--text2); font-size: 0.82rem; cursor: pointer; padding: 6px 10px; border-radius: var(--rs); transition: all 0.2s; }
     .btn-ghost:hover { color: var(--text); background: var(--surface); }
+    .btn-ghost:active { transform: scale(0.95); }
     .btn-ghost-danger { color: var(--error); }
     .btn-ghost-danger:hover { background: rgba(248,113,113,0.1); }
     .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -420,18 +449,172 @@
       .theme-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (min-width: 640px) { .games-grid { grid-template-columns: 1fr 1fr; } }
+    /* ============================================================
+       SISTEMA DE ESCENAS — Fase 1
+       Capas (de atrás hacia adelante):
+       1) body background (--bg, ya existente, cambia por tema)
+       2) .scene-particles  → partículas ambiente, sutiles, en TODA la app
+       3) contenido normal (header, main, nav) — nunca tapado
+       4) dentro de Inicio: .inicio-scene-decor → decoración más rica,
+          contenida SOLO ahí para no arriesgar legibilidad en el resto
+    ============================================================ */
+    .scene-particles { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+    .scene-particle { position: absolute; border-radius: 50%; will-change: transform, opacity; }
+    .scene-particle.shape-emoji { border-radius: 0; font-size: 1em; line-height: 1; }
+
+    @keyframes sceneTwinkle { 0%,100% { opacity: var(--base-op, 0.3); transform: scale(1); } 50% { opacity: calc(var(--base-op, 0.3) * 0.35); transform: scale(0.85); } }
+    @keyframes sceneDrift { 0% { transform: translate(0,0); } 50% { transform: translate(6px,-10px); } 100% { transform: translate(0,0); } }
+    @keyframes sceneFall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 0; } 10% { opacity: var(--base-op,0.5); } 100% { transform: translateY(60vh) rotate(180deg); opacity: 0; } }
+
+    .particle-twinkle { animation: sceneTwinkle linear infinite; }
+    .particle-drift { animation: sceneDrift ease-in-out infinite; }
+    .particle-fall { animation: sceneFall linear infinite; }
+
+    /* Escena rica de Inicio — contenida, nunca se sale de la tarjeta */
+    .inicio-scene { position: relative; overflow: hidden; border-radius: var(--r); }
+    .inicio-scene-decor { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+    .inicio-hero { position: relative; z-index: 1; }
+
+    .decor-moon { position: absolute; top: 10%; right: 10%; width: 46px; height: 46px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff8e0, #e8d9a0 60%, #c9b06a 100%);
+      box-shadow: -10px 0 0 -2px var(--bg) inset, 0 0 24px rgba(232,217,160,0.5); opacity: 0.85; }
+    .decor-cloud { position: absolute; width: 70px; height: 22px; border-radius: 40px; background: rgba(255,255,255,0.06); filter: blur(1px); animation: sceneDrift 12s ease-in-out infinite; }
+    .decor-flower { position: absolute; width: 22px; height: 22px; opacity: 0.55; animation: sceneDrift 7s ease-in-out infinite; }
+    .decor-heart-static { position: absolute; opacity: 0.35; font-size: 1.1rem; color: var(--rose); animation: sceneDrift 6s ease-in-out infinite; }
+    .decor-web-line { position: absolute; top: -20px; right: -20px; width: 130px; height: 130px; opacity: 0.18;
+      background: repeating-conic-gradient(from 0deg, var(--purple) 0deg 1.2deg, transparent 1.2deg 30deg);
+      border-radius: 50%; mask: radial-gradient(circle at top right, black 0%, black 55%, transparent 75%); }
+    .decor-spotlight { position: absolute; top: -30px; width: 90px; height: 220px; opacity: 0.22;
+      background: linear-gradient(180deg, var(--purple), transparent 80%); clip-path: polygon(40% 0%, 60% 0%, 100% 100%, 0% 100%);
+      animation: sceneDrift 9s ease-in-out infinite; }
+    .decor-initials { position: absolute; bottom: -14px; right: -6px; font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: 4.2rem; opacity: 0.06; letter-spacing: 2px; color: var(--text); pointer-events: none; }
+    .decor-skyline { position: absolute; bottom: 0; left: 0; right: 0; height: 34px; opacity: 0.5;
+      background: linear-gradient(0deg, var(--bg3), transparent);
+      -webkit-mask: repeating-linear-gradient(90deg, black 0 14px, transparent 14px 18px); mask: repeating-linear-gradient(90deg, black 0 14px, transparent 14px 18px); }
+    .decor-window { position: absolute; bottom: 6px; width: 3px; height: 3px; background: var(--gold); opacity: 0.6; border-radius: 1px; }
+    .decor-stadium-light { position: absolute; top: 6px; width: 4px; height: 34px; background: rgba(255,255,255,0.15); }
+    .decor-stadium-light::after { content: ''; position: absolute; top: -8px; left: -8px; width: 20px; height: 20px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.5), transparent 70%); }
+    .decor-field-line { position: absolute; bottom: -40px; left: 50%; width: 140px; height: 140px; margin-left: -70px;
+      border: 1.5px solid rgba(255,255,255,0.12); border-radius: 50%; }
+    .decor-mini-creature { position: absolute; opacity: 0.65; animation: sceneDrift 6.5s ease-in-out infinite; filter: drop-shadow(0 3px 6px rgba(240,160,192,0.35)); }
+    .decor-stage-beam { position: absolute; top: -10%; width: 3px; height: 130%; opacity: 0.15;
+      background: linear-gradient(180deg, var(--rose), transparent 85%); transform: rotate(8deg);
+      animation: sceneBeamSway 7s ease-in-out infinite; }
+    @keyframes sceneBeamSway { 0%,100% { transform: rotate(8deg); opacity: 0.1; } 50% { transform: rotate(-6deg); opacity: 0.22; } }
+
+    /* Fase 2 — composición original a partir de dirección artística */
+    .decor-performer { position: absolute; bottom: 0; right: 4%; width: 84px; height: 132px;
+      opacity: 0.92; filter: drop-shadow(0 0 18px var(--rose)); animation: performerSway 5s ease-in-out infinite; }
+    @keyframes performerSway { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-3px) rotate(1deg); } }
+    .decor-couple { position: absolute; bottom: 4%; left: 50%; width: 110px; margin-left: -55px; opacity: 0.9; }
+    .decor-horizon { position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
+      background: linear-gradient(0deg, var(--purple) 0%, transparent 100%); opacity: 0.1; }
+    .decor-shimmer { position: absolute; top: -20%; left: -60%; width: 40%; height: 160%; opacity: 0.12;
+      background: linear-gradient(115deg, transparent 30%, var(--gold) 50%, transparent 70%);
+      animation: shimmerSweep 6s ease-in-out infinite; }
+    @keyframes shimmerSweep { 0% { transform: translateX(0); opacity: 0; } 12% { opacity: 0.12; } 85% { opacity: 0.12; } 100% { transform: translateX(280%); opacity: 0; } }
+    .decor-fineline { position: absolute; top: 14px; left: 14px; right: 14px; bottom: 14px;
+      border: 1px solid var(--purple); opacity: 0.14; border-radius: calc(var(--r) - 4px); pointer-events: none; }
+    .decor-scoreboard { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); padding: 4px 14px;
+      background: rgba(0,0,0,0.35); border-radius: 6px; font-size: 0.72rem; letter-spacing: 1px; color: var(--rose);
+      font-family: 'Inter', monospace; opacity: 0.85; }
+    .decor-streak { position: absolute; left: -20%; width: 55%; height: 2px; opacity: 0.2;
+      background: linear-gradient(90deg, transparent, var(--rose), transparent);
+      animation: streakMove 5.5s linear infinite; }
+    @keyframes streakMove { 0% { transform: translateX(0) rotate(-8deg); opacity: 0; } 15% { opacity: 0.25; } 85% { opacity: 0.25; } 100% { transform: translateX(260%) rotate(-8deg); opacity: 0; } }
+
+    body.anim-off .decor-performer, body.anim-off .decor-shimmer, body.anim-off .decor-streak { animation: none !important; }
+
+    /* Fase 3 — reacciones al tocar/hacer clic (se disparan una vez, no en loop) */
+    .mascot-poke { animation: pokeBounce 0.4s ease; }
+    @keyframes pokeBounce { 0% { transform: scale(1) rotate(0); } 35% { transform: scale(0.88,1.12) rotate(-4deg); } 65% { transform: scale(1.06,0.94) rotate(3deg); } 100% { transform: scale(1) rotate(0); } }
+    .performer-glow { animation: performerFlash 0.7s ease; }
+    @keyframes performerFlash { 0% { filter: drop-shadow(0 0 18px var(--rose)); } 40% { filter: drop-shadow(0 0 34px var(--gold)) brightness(1.25); } 100% { filter: drop-shadow(0 0 18px var(--rose)); } }
+    .couple-warm { animation: coupleGlow 0.8s ease; }
+    @keyframes coupleGlow { 0%,100% { filter: none; } 45% { filter: drop-shadow(0 0 14px var(--rose)) brightness(1.2); } }
+    .scoreboard-bump { animation: bumpScale 0.35s ease; }
+    @keyframes bumpScale { 0% { transform: translateX(-50%) scale(1); } 40% { transform: translateX(-50%) scale(1.14); } 100% { transform: translateX(-50%) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .decor-performer, .decor-shimmer, .decor-streak { animation: none !important; } }
+    .decor-ball { position: absolute; width: 20px; height: 20px; border-radius: 50%; opacity: 0.4;
+      background: radial-gradient(circle at 35% 30%, #fff, #ccc 60%, #888 100%); animation: sceneDrift 8s ease-in-out infinite; }
+    .decor-soft-shape { position: absolute; border-radius: 50%; filter: blur(18px); opacity: 0.25; }
+
+    /* Corazones flotantes reutilizables (reacción / heartsOnEnter) */
+    .heart-float { position: fixed; z-index: 400; pointer-events: none; font-size: 1.3rem; color: var(--rose);
+      animation: heartRise 2.2s ease-out forwards; }
+    @keyframes heartRise { 0% { transform: translateY(0) scale(0.7); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: translateY(-140px) scale(1.15); opacity: 0; } }
+
+    /* Transición de entrada de secciones/tarjetas */
+    .section-page { animation: none; }
+    .section-page.active { animation: sceneSectionIn 0.35s ease both; }
+    @keyframes sceneSectionIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .card, .quick-card { animation: sceneCardIn 0.4s ease both; }
+    @keyframes sceneCardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Mood */
+    .mood-row { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 6px; }
+    .mood-chip { flex: 0 0 auto; padding: 7px 12px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border);
+      font-size: 0.82rem; cursor: pointer; transition: transform 0.15s, border-color 0.2s; white-space: nowrap; }
+    .mood-chip:active { transform: scale(0.95); }
+    .mood-chip.selected { border-color: var(--purple); background: rgba(155,125,248,0.14); }
+    .mood-display-row { display: flex; gap: 10px; font-size: 0.82rem; color: var(--text2); margin-top: 6px; flex-wrap: wrap; }
+
+    .surprise-btn { width: 100%; padding: 14px; border-radius: var(--r); border: none; cursor: pointer; margin-top: 4px;
+      background: linear-gradient(135deg, var(--purple), var(--rose)); color: #fff; font-weight: 600; font-size: 0.95rem;
+      transition: transform 0.15s; }
+    .surprise-btn:active { transform: scale(0.97); }
+
+    .anim-toggle-row { display: flex; gap: 6px; }
+    .anim-opt { flex: 1; text-align: center; padding: 8px 4px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border);
+      font-size: 0.76rem; cursor: pointer; }
+    .anim-opt.selected { border-color: var(--purple); background: rgba(155,125,248,0.14); }
+
+    /* Nivel de animación controlado por el usuario (independiente del SO) */
+    body.anim-off .scene-particle, body.anim-off .decor-cloud, body.anim-off .decor-flower, body.anim-off .decor-heart-static,
+    body.anim-off .decor-spotlight, body.anim-off .decor-ball, body.anim-off .heart-float,
+    body.anim-off .section-page.active, body.anim-off .card, body.anim-off .quick-card { animation: none !important; transition: none !important; }
+    body.anim-reduced .scene-particles { opacity: 0.5; }
+    body.anim-reduced .decor-cloud, body.anim-reduced .decor-flower, body.anim-reduced .decor-spotlight, body.anim-reduced .decor-ball { animation-duration: 20s !important; }
+
+    /* El sistema operativo del usuario manda por encima de cualquier ajuste */
+    @media (prefers-reduced-motion: reduce) {
+      .scene-particle, .decor-cloud, .decor-flower, .decor-heart-static, .decor-spotlight, .decor-ball, .heart-float,
+      .section-page.active, .card, .quick-card { animation: none !important; transition: none !important; }
+      .scene-particles { opacity: 0.4; }
+    }
   </style>
 </head>
 <body>
 
 <div id="proposal">
   <div class="stars-wrap" id="starsWrap"></div>
+  <div class="hearts-bg" id="heartsBg"></div>
   <div class="glow-blob glow-1"></div>
   <div class="glow-blob glow-2"></div>
   <div class="proposal-card">
     <div class="proposal-eyebrow">para ti, con cariño</div>
     <div class="proposal-names">Evolet</div>
     <div class="proposal-heart-line"><div class="line"></div><span style="font-size:1.1rem">💜</span><div class="line"></div></div>
+    <div class="proposal-mascot" aria-hidden="true" onclick="tocarMascota(this)" style="cursor:pointer;">
+      <svg viewBox="0 0 120 120" width="92" height="92">
+        <ellipse cx="60" cy="74" rx="36" ry="30" fill="#f7dfee"/>
+        <ellipse cx="30" cy="80" rx="10" ry="9" fill="#f7dfee"/>
+        <ellipse cx="90" cy="80" rx="10" ry="9" fill="#f7dfee"/>
+        <circle cx="60" cy="44" r="29" fill="#fdf0f7"/>
+        <ellipse cx="39" cy="21" rx="9" ry="12" fill="#fdf0f7"/>
+        <ellipse cx="81" cy="21" rx="9" ry="12" fill="#fdf0f7"/>
+        <ellipse cx="39" cy="23" rx="4" ry="6" fill="#f7c9e0"/>
+        <ellipse cx="81" cy="23" rx="4" ry="6" fill="#f7c9e0"/>
+        <circle cx="49" cy="42" r="3.6" fill="#3a2a33"/>
+        <circle cx="71" cy="42" r="3.6" fill="#3a2a33"/>
+        <circle cx="42" cy="52" r="5" fill="#f0a0c0" opacity="0.55"/>
+        <circle cx="78" cy="52" r="5" fill="#f0a0c0" opacity="0.55"/>
+        <path d="M52 53 Q60 59 68 53" stroke="#3a2a33" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <path d="M60 8 C 56 2, 46 4, 46 12 C 46 20, 60 26, 60 26 C 60 26, 74 20, 74 12 C 74 4, 64 2, 60 8 Z" fill="#f0a0c0"/>
+      </svg>
+    </div>
     <div class="proposal-q">
       Sé que no soy muy bueno para decir estas cosas sin borrarlo 3 veces antes, pero...
       <strong>¿Quieres ser mi pareja?</strong>
@@ -445,8 +628,9 @@
 </div>
 
 <div id="app">
+  <div class="scene-particles" id="sceneParticles"></div>
   <header class="app-header">
-    <div class="header-logo" id="headerLogo">J &amp; E</div>
+    <div class="header-logo" id="headerLogo" onclick="easterEggLogo()">J &amp; E</div>
     <div class="header-streak" id="headerStreak" style="display:none;"></div>
     <div class="header-days-badge" id="headerDays">💜</div>
     <button class="btn-settings-icon" onclick="navTo('config')" title="Ajustes">⚙</button>
@@ -455,17 +639,28 @@
   <main class="app-main">
 
     <section class="section-page active" id="sec-inicio">
-      <div class="inicio-hero">
-        <div class="inicio-emoji">💜</div>
-        <div class="inicio-title">Jhamir y Evolet</div>
-        <div class="inicio-subtitle">Su mundo, su historia, hecho con <em>jsjs</em> y cariño.</div>
-        <div class="status-badge"><div class="status-dot"></div>Juntos desde hoy</div>
+      <div class="inicio-scene" id="inicioScene">
+        <div class="inicio-scene-decor" id="inicioSceneDecor"></div>
+        <div class="inicio-hero">
+          <div class="inicio-emoji">💜</div>
+          <div class="inicio-title">Jhamir y Evolet</div>
+          <div class="inicio-subtitle">Su mundo, su historia, hecho con <em>jsjs</em> y cariño.</div>
+          <div class="status-badge"><div class="status-dot"></div>Juntos desde hoy</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">💭 ¿Cómo están hoy?</div>
+        <div class="mood-row" id="moodRow"></div>
+        <div class="mood-display-row" id="moodDisplay"></div>
       </div>
 
       <div class="pregunta-dia-box">
         <div class="pregunta-dia-label">❓ Pregunta del día</div>
         <div class="pregunta-dia-text" id="preguntaDiaText">Cargando...</div>
       </div>
+
+      <button class="surprise-btn" onclick="sorprendeme()">✨ Sorpréndeme</button>
 
       <div class="quick-grid">
         <div class="quick-card" onclick="navTo('tiempo')"><div class="quick-card-icon">⏱</div><div class="quick-card-label">Nuestro tiempo</div></div>
@@ -506,9 +701,17 @@
         <div class="tiempo-start-text"><div class="tiempo-start-name">Fecha de inicio</div><div class="tiempo-start-date" id="startDateDisplay">—</div></div>
         <button class="btn-ghost" id="btnEditarFecha" onclick="editarFechaInicio()">Editar</button>
       </div>
-      <div class="card">
+      <div class="card" id="aniverCard">
         <div class="card-title">📌 Próximo aniversario</div>
         <div id="aniverInfo" style="font-size:0.88rem;color:var(--text2);line-height:1.6;"></div>
+      </div>
+      <div class="card" id="cierreRelacion" style="display:none;">
+        <div class="card-title">💜 Nuestra etapa juntos</div>
+        <div style="font-size:0.9rem;line-height:2;color:var(--text2);">
+          <div><strong style="color:var(--text);">Comenzamos:</strong> <span id="cierreInicio">—</span></div>
+          <div><strong style="color:var(--text);">Terminamos:</strong> <span id="cierreFin">—</span></div>
+        </div>
+        <div style="margin-top:10px;font-size:0.82rem;color:var(--text3);">Las cartas y recuerdos siguen aquí, tal como quedaron.</div>
       </div>
     </section>
 
@@ -751,6 +954,7 @@
 
       <div class="card" id="adminLoginCard">
         <div class="config-section-title">🔒 Acceso de administrador</div>
+        <div id="adminChecking" style="display:none;" class="lock-note">Verificando sesión...</div>
         <div id="adminLoginForm">
           <div class="note-box">Esto sí es un login real (Firebase Authentication). Solo entra quien sepa la contraseña real de Jhamir — Evolet no necesita nada de esto, ella usa la página normal sin iniciar sesión.</div>
           <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
@@ -796,8 +1000,12 @@
           <div class="toggle on" id="tog-sound" onclick="toggleSetting('sound')"></div>
         </div>
         <div class="config-row">
-          <div class="config-row-left"><div class="config-row-label">Animaciones</div><div class="config-row-desc">Transiciones suaves</div></div>
-          <div class="toggle on" id="tog-anim" onclick="toggleSetting('anim')"></div>
+          <div class="config-row-left"><div class="config-row-label">Animaciones</div><div class="config-row-desc">Partículas, transiciones y parallax</div></div>
+        </div>
+        <div class="anim-toggle-row" style="margin-bottom:10px;">
+          <div class="anim-opt" data-level="full" onclick="setAnimLevel('full')">Completas</div>
+          <div class="anim-opt" data-level="reduced" onclick="setAnimLevel('reduced')">Reducidas</div>
+          <div class="anim-opt" data-level="off" onclick="setAnimLevel('off')">Ninguna</div>
         </div>
         <div style="margin-top:14px;"><button class="btn-primary" onclick="guardarConfig()">Guardar ajustes</button></div>
       </div>
@@ -818,6 +1026,17 @@
           <button class="btn-secondary" onclick="if(requiereAdmin()) document.getElementById('importFileInput').click()">⬆️ Importar datos</button>
         </div>
         <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importarDatos(event)">
+      </div>
+
+      <div class="card" id="terminarRelacionCard" style="display:none;">
+        <div class="config-section-title">Estado de la relación</div>
+        <div style="font-size:0.82rem;color:var(--text2);line-height:1.6;margin-bottom:14px;">
+          Esto no borra nada — cartas y recuerdos se quedan tal cual. Solo marca la relación como terminada y guarda la fecha.
+        </div>
+        <div class="lock-note" id="terminarLockNote">🔒 Solo disponible si tu perfil es "Jhamir".</div>
+        <button class="btn-secondary" id="btnTerminarRelacion" style="color:var(--error);border-color:rgba(248,113,113,0.3);" onclick="terminarRelacion()">
+          Terminar relación
+        </button>
       </div>
 
       <div class="card">
@@ -912,10 +1131,10 @@ const LS = {
   del: (k) => { try { localStorage.removeItem('je_' + k); } catch {} }
 };
 
-const DATA_VERSION = 2;
-const ALL_KEYS = ['accepted','startDate','settings','recuerdos','fechas','frasesGuardadas','response','responseDate',
+const DATA_VERSION = 3;
+const ALL_KEYS = ['accepted','startDate','endDate','settings','recuerdos','fechas','frasesGuardadas','response','responseDate',
   'highScore','names','whoami','cartaPublicada','cartaPublicadaFecha','cartaPublicadaTS','cartaVistaTS','apodos','capsulas','memoriaArchivo','theme',
-  'racha','iaNombre','dataVersion'];
+  'racha','iaNombre','dataVersion','moodJhamir','moodEvolet'];
 
 // De todo lo guardado, esto es lo que se sincroniza entre los dos celulares.
 // Se quedan SOLO en este dispositivo (a propósito, no por limitación):
@@ -930,9 +1149,11 @@ const ALL_KEYS = ['accepted','startDate','settings','recuerdos','fechas','frases
 //   Firestore tiene un límite de 1 MB por documento compartido — si esto se
 //   sincronizara, arriesgaría romper la sincronización de TODO lo demás.
 // - dataVersion: solo es un número interno de control, no dato real.
-const SYNC_KEYS = ['accepted','startDate','recuerdos','fechas','frasesGuardadas','response','responseDate',
+// moodJhamir/moodEvolet SÍ se sincronizan (a propósito): la idea es que cada
+// quien vea el mood del otro, por eso son dos campos separados, no uno solo.
+const SYNC_KEYS = ['accepted','startDate','endDate','recuerdos','fechas','frasesGuardadas','response','responseDate',
   'highScore','names','cartaPublicada','cartaPublicadaFecha','cartaPublicadaTS','apodos','capsulas',
-  'theme','settings','iaNombre'];
+  'theme','settings','iaNombre','moodJhamir','moodEvolet'];
 
 function docCompartido() { return db.collection('parejas').doc(ROOM_ID); }
 
@@ -969,7 +1190,7 @@ function marcarCartaVista() {
 function renderSettingsUI() {
   const s = state.settings;
   document.getElementById('tog-sound')?.classList.toggle('on', s.sound);
-  document.getElementById('tog-anim')?.classList.toggle('on', s.anim);
+  document.querySelectorAll('.anim-opt').forEach(el => el.classList.toggle('selected', el.dataset.level === (s.anim || 'full')));
 }
 
 // Cuando llega un cambio remoto (del otro celular), lo aplicamos a nuestro
@@ -997,8 +1218,8 @@ function aplicarCambiosRemotos(data, esCargaInicial) {
     } else if (appVisible) {
       cargarCartaPublicada(); renderCartaAdminPicker(); cargarRespuesta();
       renderFechas(); renderRecuerdos(); renderFrasesGuardadas(); renderApodos(); renderCapsulas();
-      actualizarNombresUI(); iniciarContador();
-      renderSettingsUI(); actualizarIaNombreUI(); aplicarTemaSilencioso(state.theme);
+      actualizarNombresUI(); iniciarContador(); actualizarAdminUI();
+      renderSettingsUI(); actualizarIaNombreUI(); aplicarTemaSilencioso(state.theme); renderMoodUI();
       if (!esCargaInicial) toast('Se actualizó algo desde el otro celular 🔄');
     }
     renderBadgeCartas();
@@ -1057,13 +1278,22 @@ function migrarDatos() {
     if (cambiado) LS.set('recuerdos', recuerdos);
     LS.set('dataVersion', 2);
   }
+  if (v < 3) {
+    // "anim" era true/false; ahora es 'full'/'reduced'/'off'. Convertimos sin perder la preferencia.
+    const s = LS.get('settings', { sound: true, anim: true });
+    if (typeof s.anim === 'boolean') { s.anim = s.anim ? 'full' : 'off'; LS.set('settings', s); }
+    LS.set('dataVersion', 3);
+  }
 }
 migrarDatos();
 
 let state = {
   accepted:     LS.get('accepted', false),
   startDate:    LS.get('startDate', null),
-  settings:     LS.get('settings', { sound: true, anim: true }),
+  endDate:      LS.get('endDate', null),
+  settings:     LS.get('settings', { sound: true, anim: 'full' }),
+  moodJhamir:   LS.get('moodJhamir', null),
+  moodEvolet:   LS.get('moodEvolet', null),
   recuerdos:    LS.get('recuerdos', []),
   fechas:       LS.get('fechas', [{ id: 1, nombre: 'Nuestro primer día', fecha: null, tipo: 'purple' }]),
   frases:       LS.get('frasesGuardadas', []),
@@ -1173,14 +1403,14 @@ Gracias por estar conmigo, por las bromas y por ser tú, mi enana.
 
 const IA_TEMPLATES = {
   buenos_dias: { label: '☀️ Buenos días',
-    corto: ['Buenos días, enana.', 'Buenos días, pulga aventurera.', 'Oe, buenos días.', 'Buenos días, Evi.'],
-    normal: ['Buenos días, enana. Espero que amanezcas de buenas jsjs.', 'Buenos días pulga aventurera, que tengas un buen día.', '¿Amaneciste bien? Buenos días de todas formas.', 'Buenos días, Evi. Ya sabes, cuídate hoy.'] },
+    corto: ['Buenos días, enana.', 'Buenos días, pulga aventurera.', 'Oe, buenos días.', 'Buenos días, eviii.'],
+    normal: ['Buenos días, enana. Espero que amanezcas de buenas jsjs.', 'Buenos días pulga aventurera, que tengas un buen día.', '¿Amaneciste bien? Buenos días de todas formas.', 'Buenos días, eviii. Ya sabes, cuídate hoy.'] },
   buenas_noches: { label: '🌙 Buenas noches',
     corto: ['Buenas noches, Evi.', 'Descansa, enana.', 'Buenas noches, pulga.', 'Ya duérmete jsjs.'],
     normal: ['Buenas noches, evi. Descansa.', 'Ya duérmete, mañana seguimos hablando. Buenas noches.', 'Buenas noches enana emo, que sueñes bonito.', 'Nos vemos mañana, descansa bien.'] },
   extrano: { label: '🫂 Te extraño',
-    corto: ['Te extraño un poco.', 'Me acordé de ti.', 'Ps, te extraño.', 'Quisiera hablar contigo ahorita.'],
-    normal: ['Ps, te extraño un poco. No es para tanto pero sí.', 'Oe, hoy me acordé de ti de la nada.', 'Te extraño, aunque suene raro decirlo así directo.', 'Quisiera que estuvieras aquí ahorita, la vrd.'] },
+    corto: ['Te extraño un poco.', 'Me acordé de ti.', 'Ps, te extraño.', 'Quisiera hablar contigo ahorita, mi vida.'],
+    normal: ['Ps, te extraño un poco. No es para tanto pero sí.', 'Oe, hoy me acordé de ti de la nada.', 'Te extraño, mi vida, aunque suene raro decirlo así directo.', 'Quisiera que estuvieras aquí ahorita, la vrd.'] },
   animo: { label: '🤍 Para animarte',
     corto: ['Aquí ando, tranquila.', 'Todo va a estar bien.', 'Cuenta conmigo.', 'Ya va a pasar, tranquila.'],
     normal: ['Oe, sé que no la estás pasando bien, pero aquí ando.', 'Todo va a estar bien, tranquila. Aquí estoy si necesitas algo.', 'No te agobies tanto, ya va a pasar.', 'Cuenta conmigo para lo que sea, en serio.'] },
@@ -1199,14 +1429,373 @@ const IA_TEMPLATES = {
 };
 
 const THEMES = {
-  noche:   { name: 'Noche estrellada', vars: { '--purple':'#9b7df8','--purpleD':'#7c5cdc','--rose':'#f0a0c0','--gold':'#d4a96a','--bg':'#0c0c15','--bg2':'#10101d','--bg3':'#16162a' } },
-  rosa:    { name: 'Rosa suave',       vars: { '--purple':'#e893b3','--purpleD':'#d16f95','--rose':'#f5c2d6','--gold':'#e0a96a','--bg':'#160f13','--bg2':'#1c1216','--bg3':'#241619' } },
-  violeta: { name: 'Violeta nocturno', vars: { '--purple':'#8b6df0','--purpleD':'#6a4dd1','--rose':'#c9a0f0','--gold':'#c9b06a','--bg':'#0d0b17','--bg2':'#120f1f','--bg3':'#171328' } },
-  dorado:  { name: 'Dorado elegante',  vars: { '--purple':'#d4a96a','--purpleD':'#b8874a','--rose':'#e8c88a','--gold':'#f0d9a0','--bg':'#100d08','--bg2':'#17130c','--bg3':'#1e1810' } },
-  minimal: { name: 'Minimalista oscuro', vars: { '--purple':'#a0a0b0','--purpleD':'#7a7a8a','--rose':'#c0c0cc','--gold':'#8a8a9a','--bg':'#0a0a0c','--bg2':'#101012','--bg3':'#151518' } },
-  aracnido:{ name: '🕷️ Arácnido',      vars: { '--purple':'#e0453f','--purpleD':'#b8302a','--rose':'#4a6fd4','--gold':'#e0703a','--bg':'#0a0a0f','--bg2':'#12080a','--bg3':'#1a0d10' } },
-  alien:   { name: '🎭 Alien Stage',   vars: { '--purple':'#c04ee0','--purpleD':'#9a30ba','--rose':'#ff5fa8','--gold':'#8a4ae0','--bg':'#0a0612','--bg2':'#0f0918','--bg3':'#150d20' } }
+  noche:   { name: 'Noche estrellada', vars: { '--purple':'#9b7df8','--purpleD':'#7c5cdc','--rose':'#f0a0c0','--gold':'#d4a96a','--bg':'#0c0c15','--bg2':'#10101d','--bg3':'#16162a' },
+    decorations: ['moon','clouds','clouds','horizon-glow'], particles: { type: 'estrella', count: 22 }, heartsOnEnter: false },
+  rosa:    { name: 'Evi 🌸',            vars: { '--purple':'#e893b3','--purpleD':'#d16f95','--rose':'#f5c2d6','--gold':'#e0a96a','--bg':'#160f13','--bg2':'#1c1216','--bg3':'#241619' },
+    decorations: ['flower','flower','flower','heart-static','mini-creature','mini-creature'], particles: { type: 'petalo', count: 18 }, heartsOnEnter: true },
+  violeta: { name: 'Violeta nocturno', vars: { '--purple':'#8b6df0','--purpleD':'#6a4dd1','--rose':'#c9a0f0','--gold':'#c9b06a','--bg':'#0d0b17','--bg2':'#120f1f','--bg3':'#171328' },
+    decorations: ['soft-shape','soft-shape'], particles: { type: 'estrella', count: 14 }, heartsOnEnter: false },
+  dorado:  { name: 'Dorado elegante',  vars: { '--purple':'#d4a96a','--purpleD':'#b8874a','--rose':'#e8c88a','--gold':'#f0d9a0','--bg':'#100d08','--bg2':'#17130c','--bg3':'#1e1810' },
+    decorations: ['soft-shape','shimmer'], particles: { type: 'brillo', count: 14 }, heartsOnEnter: false },
+  minimal: { name: 'Minimalista oscuro', vars: { '--purple':'#a0a0b0','--purpleD':'#7a7a8a','--rose':'#c0c0cc','--gold':'#8a8a9a','--bg':'#0a0a0c','--bg2':'#101012','--bg3':'#151518' },
+    decorations: ['fine-line'], particles: { type: 'estrella', count: 6 }, heartsOnEnter: false },
+  aracnido:{ name: 'Jhami 🕷️',        vars: { '--purple':'#e0453f','--purpleD':'#b8302a','--rose':'#4a6fd4','--gold':'#e0703a','--bg':'#0a0a0f','--bg2':'#12080a','--bg3':'#1a0d10' },
+    decorations: ['skyline','web-line','motion-streak'], particles: { type: 'mota', count: 16 }, heartsOnEnter: false },
+  alien:   { name: '🎭 Alien Stage',   vars: { '--purple':'#c04ee0','--purpleD':'#9a30ba','--rose':'#ff5fa8','--gold':'#8a4ae0','--bg':'#0a0612','--bg2':'#0f0918','--bg3':'#150d20' },
+    decorations: ['spotlight','stage-beam','stage-beam','performer'], particles: { type: 'destello', count: 18 }, heartsOnEnter: false },
+  futbol:  { name: '⚽ Fútbol',        vars: { '--purple':'#3a9d5c','--purpleD':'#2a7d45','--rose':'#e8d24a','--gold':'#e0e0e0','--bg':'#080f0a','--bg2':'#0c140e','--bg3':'#101a13' },
+    decorations: ['field-line','stadium-light','stadium-light','ball','scoreboard'], particles: { type: 'brillo', count: 12 }, heartsOnEnter: false },
+  nosotros:{ name: '💜 Nosotros',      vars: { '--purple':'#b08ef0','--purpleD':'#9070d8','--rose':'#f5b8d0','--gold':'#e0c078','--bg':'#0e0b17','--bg2':'#13101f','--bg3':'#191428' },
+    decorations: ['moon','initials','couple-silhouette'], particles: { type: 'corazon', count: 10 }, heartsOnEnter: true }
 };
+
+// Registro de personajes/OCs reales — vacío hasta que Jhamir suba imágenes.
+// Al proporcionarlas, van aquí como data URI (ej. characters.evolet = "data:image/png;base64,...")
+// y renderCharacterSlot() las usa automáticamente; mientras tanto muestra un fallback elegante.
+const CHARACTER_ASSETS = { evolet: null, jhamir: null };
+
+// Registro organizado como pediste. Vacío a propósito: los enlaces de
+// Pinterest/Tenor que compartiste son arte de terceros con copyright
+// (Alien Stage, Chiikawa, Marvel, Dragon Ball, Murder Drones, SEGA,
+// Miraculous...) — no puedo redistribuirlos aquí, y tampoco son enlaces
+// estables para depender de ellos a largo plazo. Cuando tengas imágenes
+// que sí sean tuyas para usar (tus fotos, tu propio arte/OCs, algo que
+// compres con licencia), van directo aquí como data URI y se usan solas.
+const VISUAL_ASSETS = {
+  evolet: { alienStage: [], ivan: [], chiikawa: [] },
+  jhamir: { spiderMan: [], goku: [], murderDrones: [] },
+  shared: { couple: [], fnf: [], sonic: [], ladybug: [] }
+};
+
+// Assets 100% originales, creados para esta página como dirección artística
+// propia a partir de las referencias (composición/luz/paleta), nunca copiando
+// diseño de personaje. Todos viven como SVG/CSS inline — ver DECOR_LIB.
+const GENERATED_ASSETS = {
+  mascotaPropuesta: 'criatura redonda original — pantalla de propuesta',
+  miniCriatura: 'versión pequeña de la criatura — decoración escena Evi',
+  performer: 'artista original de escenario — cabello, rostro y vestuario propios, sin copiar a Ivan ni a ningún personaje — escena Alien Stage',
+  parejaSiluetas: 'dos siluetas abstractas juntas, en los tonos de cada uno — escena Nosotros'
+};
+
+function renderCharacterSlot(key, label) {
+  if (CHARACTER_ASSETS[key]) return `<img src="${CHARACTER_ASSETS[key]}" alt="${escHTML(label)}" style="width:64px;height:64px;object-fit:contain;border-radius:50%;">`;
+  const inicial = (label || '?').charAt(0).toUpperCase();
+  return `<div style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--purple),var(--rose));font-family:'Playfair Display',serif;font-weight:700;
+    font-size:1.3rem;color:#fff;opacity:0.85;">${inicial}</div>`;
+}
+
+// Biblioteca de decoraciones — cada escena elige cuáles usar (ver THEMES).
+// Todas son CSS/SVG propios, nunca arte de personajes con derechos de autor.
+const DECOR_LIB = {
+  moon: () => `<div class="decor-moon"></div>`,
+  clouds: () => `<div class="decor-cloud" style="${posAleatoria(5,70,10,60)}animation-delay:-${Math.random()*8}s;"></div>`,
+  flower: () => `<svg class="decor-flower" style="${posAleatoria(5,90,10,85)}" viewBox="0 0 24 24"><g fill="var(--rose)">
+    <ellipse cx="12" cy="6" rx="4" ry="5"/><ellipse cx="12" cy="18" rx="4" ry="5"/>
+    <ellipse cx="6" cy="12" rx="5" ry="4"/><ellipse cx="18" cy="12" rx="5" ry="4"/></g>
+    <circle cx="12" cy="12" r="3" fill="var(--gold)"/></svg>`,
+  'heart-static': () => `<div class="decor-heart-static" style="${posAleatoria(8,88,10,80)}">♥</div>`,
+  'soft-shape': () => `<div class="decor-soft-shape" style="${posAleatoria(-10,70,-10,60)}width:${90+Math.random()*70}px;height:${90+Math.random()*70}px;background:var(--purple);"></div>`,
+  'web-line': () => `<div class="decor-web-line"></div>`,
+  spotlight: () => `<div class="decor-spotlight" style="left:${10+Math.random()*70}%;animation-delay:-${Math.random()*6}s;"></div>`,
+  initials: () => `<div class="decor-initials">${(state.names?.n1||'J').charAt(0)}${(state.names?.n2||'E').charAt(0)}</div>`,
+  skyline: () => `<div class="decor-skyline"></div>` + Array.from({length:8},(_,i)=>`<div class="decor-window" style="left:${6+i*12}%;"></div>`).join(''),
+  'stadium-light': () => `<div class="decor-stadium-light" style="${Math.random()>0.5?'left':'right'}:${8+Math.random()*10}%;"></div>`,
+  ball: () => `<div class="decor-ball" style="bottom:8%;left:${20+Math.random()*60}%;animation-delay:-${Math.random()*4}s;"></div>`,
+  'field-line': () => `<div class="decor-field-line"></div>`,
+  'mini-creature': () => `<svg class="decor-mini-creature" onclick="tocarMascota(this)" style="${posAleatoria(8,75,8,80)}cursor:pointer;pointer-events:auto;" viewBox="0 0 60 60" width="26" height="26">
+    <circle cx="30" cy="24" r="16" fill="var(--rose)" opacity="0.55"/>
+    <circle cx="24" cy="22" r="2" fill="#3a2a33" opacity="0.7"/><circle cx="36" cy="22" r="2" fill="#3a2a33" opacity="0.7"/>
+    <ellipse cx="30" cy="42" rx="13" ry="10" fill="var(--rose)" opacity="0.4"/></svg>`,
+  'stage-beam': () => `<div class="decor-stage-beam" style="left:${15+Math.random()*60}%;animation-delay:-${Math.random()*7}s;"></div>`,
+  performer: () => `<svg class="decor-performer" viewBox="0 0 70 120" preserveAspectRatio="xMidYMax meet" onclick="tocarPerformer(this)" style="cursor:pointer;pointer-events:auto;">
+    <ellipse cx="35" cy="114" rx="20" ry="4" fill="#000" opacity="0.28"/>
+    <path d="M45 44 Q58 38 56 20" stroke="var(--bg2)" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+    <circle cx="56" cy="18" r="4.2" fill="var(--bg2)"/>
+    <path d="M22 38 Q35 32 48 38 L53 98 Q35 108 17 98 Z" fill="var(--bg2)"/>
+    <path d="M24 40 Q35 35 46 40" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.55"/>
+    <rect x="31" y="26" width="8" height="9" rx="3" fill="#f0d4b0"/>
+    <ellipse cx="35" cy="19" rx="10.5" ry="11.5" fill="#f0d4b0"/>
+    <path d="M24 15 Q23 4 35 3 Q47 4 46 16 Q42 8 35 8 Q28 8 26 17 L23 26 Q21 20 24 15 Z" fill="var(--purpleD)"/>
+    <path d="M44 15 Q50 22 47 32 Q48 20 43 17 Z" fill="var(--purpleD)"/>
+    <path d="M29 20 Q31.5 21.5 34 20" stroke="#3a2a33" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+    <path d="M36 20 Q38.5 21.5 41 20" stroke="#3a2a33" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+  </svg>`,
+  'couple-silhouette': () => `<svg class="decor-couple" onclick="tocarPareja(this)" style="cursor:pointer;pointer-events:auto;" viewBox="0 0 100 50">
+    <ellipse cx="37" cy="17" rx="9" ry="10" fill="var(--purple)" opacity="0.45"/>
+    <path d="M24 46 Q37 29 50 46 Z" fill="var(--purple)" opacity="0.45"/>
+    <ellipse cx="59" cy="17" rx="9" ry="10" fill="var(--rose)" opacity="0.45"/>
+    <path d="M46 46 Q59 29 72 46 Z" fill="var(--rose)" opacity="0.45"/>
+  </svg>`,
+  'horizon-glow': () => `<div class="decor-horizon"></div>`,
+  shimmer: () => `<div class="decor-shimmer"></div>`,
+  'fine-line': () => `<div class="decor-fineline"></div>`,
+  scoreboard: () => `<div class="decor-scoreboard" onclick="tocarMarcador(this)" style="cursor:pointer;pointer-events:auto;">${(state.names?.n1||'J').charAt(0)} 0 — 0 ${(state.names?.n2||'E').charAt(0)}</div>`,
+  'motion-streak': () => `<div class="decor-streak" style="top:${20+Math.random()*50}%;animation-delay:-${Math.random()*5}s;"></div>`
+};
+function posAleatoria(t1,t2,l1,l2) { return `top:${t1+Math.random()*(t2-t1)}%;left:${l1+Math.random()*(l2-l1)}%;`; }
+
+const PARTICLE_LIB = {
+  estrella: { char: null, colors: ['#ffffff','#c9b8f5'], anim: 'particle-twinkle', dur: [3,8] },
+  petalo:   { char: '❀', colors: ['#f5c2d6'], anim: 'particle-fall', dur: [8,15] },
+  mota:     { char: null, colors: ['#e0453f','#4a6fd4'], anim: 'particle-twinkle', dur: [4,9] },
+  destello: { char: null, colors: ['#ffffff','#ff5fa8'], anim: 'particle-twinkle', dur: [2,6] },
+  brillo:   { char: null, colors: ['#e8d24a','#ffffff'], anim: 'particle-twinkle', dur: [3,7] },
+  corazon:  { char: '♥', colors: ['#f0a0c0'], anim: 'particle-drift', dur: [5,10] }
+};
+
+// Partículas ambiente de TODA la app — sutiles, iguales en espíritu a las
+// de la pantalla de propuesta (crearEstrellas), solo que cambian de sabor
+// según la escena activa.
+function crearParticulasAmbiente(temaKey) {
+  const wrap = document.getElementById('sceneParticles');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  const t = THEMES[temaKey] || THEMES.noche;
+  const p = PARTICLE_LIB[t.particles.type] || PARTICLE_LIB.estrella;
+  for (let i = 0; i < t.particles.count; i++) {
+    const el = document.createElement('div');
+    el.className = 'scene-particle ' + p.anim + (p.char ? ' shape-emoji' : '');
+    const size = 1 + Math.random() * 2.2;
+    const op = 0.12 + Math.random() * 0.3;
+    const dur = p.dur[0] + Math.random() * (p.dur[1] - p.dur[0]);
+    el.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--base-op:${op};
+      animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;
+      ${p.char ? `font-size:${size*6}px;color:${p.colors[Math.floor(Math.random()*p.colors.length)]};opacity:${op};`
+                : `width:${size}px;height:${size}px;background:${p.colors[Math.floor(Math.random()*p.colors.length)]};`}`;
+    if (p.char) el.textContent = p.char;
+    wrap.appendChild(el);
+  }
+}
+
+// Escena rica de Inicio — decoraciones concretas contenidas en la tarjeta hero.
+function renderEscenaInicio(temaKey) {
+  const wrap = document.getElementById('inicioSceneDecor');
+  if (!wrap) return;
+  const t = THEMES[temaKey] || THEMES.noche;
+  wrap.innerHTML = (t.decorations || []).map(key => (DECOR_LIB[key] ? DECOR_LIB[key]() : '')).join('');
+}
+
+// Corazones flotantes reutilizables — para heartsOnEnter, reacciones y botones.
+function dispararCorazones(cantidad) {
+  if (nivelAnimacionEfectivo() === 'off') return;
+  const n = Math.min(cantidad || 6, 10);
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      const h = document.createElement('div');
+      h.className = 'heart-float';
+      h.textContent = '♥';
+      h.style.left = (30 + Math.random() * 40) + '%';
+      h.style.bottom = '90px';
+      h.style.color = i % 2 ? 'var(--rose)' : 'var(--purple)';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 2300);
+    }, i * 120);
+  }
+}
+
+/* ============================================================
+   NIVEL CENTRAL DE ANIMACIÓN (full / reduced / off)
+   El sistema operativo del usuario (prefers-reduced-motion) manda
+   por encima de lo que elija aquí, salvo que él mismo pida "full".
+============================================================ */
+function nivelAnimacionEfectivo() {
+  const elegido = state.settings?.anim || 'full';
+  const osReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (osReduce && elegido === 'full') return 'reduced';
+  return elegido;
+}
+function aplicarNivelAnimacion() {
+  const nivel = nivelAnimacionEfectivo();
+  document.body.classList.toggle('anim-off', nivel === 'off');
+  document.body.classList.toggle('anim-reduced', nivel === 'reduced');
+}
+function setAnimLevel(nivel) {
+  state.settings.anim = nivel; LS.set('settings', state.settings);
+  document.querySelectorAll('.anim-opt').forEach(el => el.classList.toggle('selected', el.dataset.level === nivel));
+  aplicarNivelAnimacion();
+}
+
+/* ============================================================
+   MOOD — cómo está cada quien, visible para el otro
+============================================================ */
+const MOODS = [
+  { id: 'feliz', label: '😊 Feliz' }, { id: 'tranquilo', label: '😌 Tranquilo' },
+  { id: 'cansado', label: '😴 Cansado' }, { id: 'triste', label: '😔 Triste' },
+  { id: 'emocionado', label: '🤩 Emocionado' }, { id: 'enamorado', label: '🥰 Enamorado' },
+  { id: 'aburrido', label: '😑 Aburrido' }, { id: 'pensativo', label: '🤔 Pensativo' }
+];
+function campoMoodPropio() { return state.whoami === 'evolet' ? 'moodEvolet' : 'moodJhamir'; }
+function renderMoodUI() {
+  const row = document.getElementById('moodRow');
+  if (row) {
+    const propio = state[campoMoodPropio()];
+    row.innerHTML = MOODS.map(m => `<div class="mood-chip ${m.id===propio?'selected':''}" onclick="setMood('${m.id}')">${m.label}</div>`).join('');
+  }
+  const disp = document.getElementById('moodDisplay');
+  if (disp) {
+    const partes = [];
+    if (state.moodJhamir) partes.push(`${state.names.n1}: ${MOODS.find(m=>m.id===state.moodJhamir)?.label || state.moodJhamir}`);
+    if (state.moodEvolet) partes.push(`${state.names.n2}: ${MOODS.find(m=>m.id===state.moodEvolet)?.label || state.moodEvolet}`);
+    disp.textContent = partes.join('   ·   ');
+  }
+}
+function setMood(id) {
+  const campo = campoMoodPropio();
+  state[campo] = id; LS.set(campo, id);
+  renderMoodUI();
+  reproducirSonido('suave');
+  const reacciones = {
+    enamorado: () => dispararCorazones(5),
+    feliz: () => confetti({ particleCount: 22, spread: 50, origin: { y: 0.65 }, colors: ['#f0d9a0','#f0a0c0'], startVelocity: 18 }),
+    emocionado: () => confetti({ particleCount: 30, spread: 65, origin: { y: 0.6 }, scalar: 0.8 }),
+    tranquilo: () => dispararCorazones(1),
+  };
+  (reacciones[id] || (() => {}))();
+  toast('Mood actualizado');
+}
+
+/* ============================================================
+   ✨ SORPRÉNDEME — elige al azar entre contenido que YA existe
+   (nada de juegos/preguntas nuevos de Fase 2 todavía)
+============================================================ */
+function sorprendeme() {
+  const opciones = ['pregunta', 'frase', 'recuerdo', 'tema', 'juego', 'corazones'];
+  const disponibles = opciones.filter(o => o !== 'recuerdo' || (state.recuerdos && state.recuerdos.length > 0));
+  const elegido = disponibles[Math.floor(Math.random() * disponibles.length)];
+  switch (elegido) {
+    case 'pregunta':
+      navTo('inicio'); renderPreguntaDia(true); toast('❓ Una pregunta para ustedes');
+      break;
+    case 'frase':
+      navTo('inicio'); rotarFraseInicio(); toast('💬 Una frase para hoy');
+      break;
+    case 'recuerdo': {
+      const r = state.recuerdos[Math.floor(Math.random() * state.recuerdos.length)];
+      Swal.fire({ title: '🖼️ Recuerdo al azar', html: `<b>${escHTML(r.titulo||'')}</b><br><span style="font-size:0.85rem;">${escHTML(r.descripcion||'')}</span>`, confirmButtonText: 'Lindo 💜' });
+      break;
+    }
+    case 'tema': {
+      const claves = Object.keys(THEMES);
+      aplicarTema(claves[Math.floor(Math.random() * claves.length)]);
+      break;
+    }
+    case 'juego': {
+      const juegos = ['juegoTrivia','juegoRuleta','juegoVerdadReto','juegoCompleta'];
+      navTo('juegos');
+      setTimeout(() => { const fn = window[juegos[Math.floor(Math.random()*juegos.length)]]; if (typeof fn === 'function') fn(); }, 200);
+      break;
+    }
+    case 'corazones':
+      dispararCorazones(8); toast('💜');
+      break;
+  }
+}
+
+/* ============================================================
+   PARALLAX sutil (mouse/touch) — se apaga solo con anim off/reduced
+   o con prefers-reduced-motion.
+============================================================ */
+function iniciarParallax() {
+  let vivo = false;
+  function mover(x, y) {
+    if (nivelAnimacionEfectivo() !== 'full') return;
+    const decor = document.getElementById('inicioSceneDecor');
+    if (!decor) return;
+    const dx = (x / window.innerWidth - 0.5) * 8;
+    const dy = (y / window.innerHeight - 0.5) * 8;
+    if (!vivo) { vivo = true; requestAnimationFrame(() => { decor.style.transform = `translate(${dx}px,${dy}px)`; vivo = false; }); }
+  }
+  window.addEventListener('mousemove', e => mover(e.clientX, e.clientY), { passive: true });
+  window.addEventListener('touchmove', e => { if (e.touches[0]) mover(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+}
+
+/* ============================================================
+   EASTER EGG — 6 toques rápidos al logo del header
+============================================================ */
+let logoClicks = 0, logoClickTimer = null;
+function easterEggLogo() {
+  logoClicks++;
+  clearTimeout(logoClickTimer);
+  logoClickTimer = setTimeout(() => { logoClicks = 0; }, 1500);
+  if (logoClicks >= 6) {
+    logoClicks = 0;
+    dispararCorazones(10);
+    confetti({ particleCount: 60, spread: 70, origin: { y: 0.3 }, colors: ['#9b7df8','#f0a0c0','#d4a96a'] });
+    toast('jsjs te encontré 💜');
+  }
+}
+
+/* ============================================================
+   SONIDO OPCIONAL — sintetizado con Web Audio, sin archivos externos.
+   Nunca se reproduce solo; siempre en respuesta a algo que el usuario
+   hizo, y solo si state.settings.sound está activado.
+============================================================ */
+let audioCtx = null;
+function reproducirSonido(tipo) {
+  if (!state.settings?.sound) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const notas = { pop: [660, 0.08], exito: [523, 880], suave: [440, 0.1], gol: [392, 523, 659] };
+    const cfg = notas[tipo] || notas.pop;
+    const t0 = audioCtx.currentTime;
+    (Array.isArray(cfg) && typeof cfg[0] === 'number' && cfg.length > 2 ? cfg : [cfg[0]]).forEach((freq, i) => {
+      const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = 'sine'; osc.frequency.value = freq;
+      const start = t0 + i * 0.09;
+      gain.gain.setValueAtTime(0.001, start);
+      gain.gain.exponentialRampToValueAtTime(0.08, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.18);
+      osc.start(start); osc.stop(start + 0.2);
+    });
+  } catch (e) { /* audio no disponible en este navegador — no pasa nada */ }
+}
+
+/* ============================================================
+   INTERACCIONES POR ESCENA — pequeñas, con intención, con
+   alternativa touch además de hover.
+============================================================ */
+function tocarMascota(el) {
+  el.classList.remove('mascot-poke'); void el.offsetWidth; el.classList.add('mascot-poke');
+  reproducirSonido('pop');
+  mascotaClicks = (mascotaClicks||0) + 1;
+  clearTimeout(mascotaTimer);
+  mascotaTimer = setTimeout(() => { mascotaClicks = 0; }, 1200);
+  if (mascotaClicks >= 4) { mascotaClicks = 0; dispararCorazones(4); toast('pulga aventurera 🐛💜'); }
+}
+let mascotaClicks = 0, mascotaTimer = null;
+
+let performerTaps = 0, performerTapTimer = null;
+function tocarPerformer(el) {
+  el.classList.remove('performer-glow'); void el.offsetWidth; el.classList.add('performer-glow');
+  performerTaps++;
+  clearTimeout(performerTapTimer);
+  performerTapTimer = setTimeout(() => { performerTaps = 0; }, 1200);
+  if (performerTaps >= 3) { performerTaps = 0; toast('🎤 en algún escenario, Ivan está cantando esto mismo'); }
+}
+
+function tocarPareja(el) {
+  el.classList.remove('couple-warm'); void el.offsetWidth; el.classList.add('couple-warm');
+  dispararCorazones(3);
+}
+
+let marcadorClicks = 0, marcadorTimer = null;
+function tocarMarcador(el) {
+  el.classList.remove('scoreboard-bump'); void el.offsetWidth; el.classList.add('scoreboard-bump');
+  reproducirSonido('pop');
+  marcadorClicks++;
+  clearTimeout(marcadorTimer);
+  marcadorTimer = setTimeout(() => { marcadorClicks = 0; }, 1500);
+  if (marcadorClicks >= 5) {
+    marcadorClicks = 0;
+    reproducirSonido('gol');
+    confetti({ particleCount: 50, spread: 60, origin: { y: 0.4 }, colors: ['#3a9d5c','#e8d24a','#ffffff'] });
+    toast('⚽ ¡GOOOL!');
+  }
+}
+
 
 const PREGUNTAS_DIA = [
   '¿Qué fue lo mejor que les pasó esta semana?',
@@ -1251,6 +1840,36 @@ function crearEstrellas() {
     s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--base-op:${op};animation-duration:${3+Math.random()*5}s;animation-delay:-${Math.random()*8}s;`;
     wrap.appendChild(s);
   }
+}
+
+// Fondo de corazones para la propuesta — tamaños/velocidades/opacidades
+// variadas y con deriva lateral, para que no se sienta como lluvia
+// mecánica. Se queda en los bordes/fondo, nunca tapa tarjeta/botones
+// porque .hearts-bg va detrás de .proposal-card en z-index.
+function crearCorazonesFondo(cantidad) {
+  const wrap = document.getElementById('heartsBg');
+  if (!wrap || nivelAnimacionEfectivo() === 'off') return;
+  const n = cantidad || 16;
+  for (let i = 0; i < n; i++) {
+    const esBrillo = Math.random() < 0.18;
+    const el = document.createElement('div');
+    el.className = esBrillo ? 'bgheart-sparkle' : 'bgheart';
+    const size = esBrillo ? (2 + Math.random()*2) : (10 + Math.random()*22);
+    const op = 0.08 + Math.random() * 0.3;
+    const dur = 9 + Math.random() * 14;
+    const drift = (Math.random() * 40 - 20).toFixed(0);
+    el.style.cssText = `left:${Math.random()*100}%;font-size:${size}px;--base-op:${op};--drift:${drift}px;
+      animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`;
+    if (!esBrillo) el.textContent = '♥';
+    wrap.appendChild(el);
+  }
+}
+
+function celebrarCorazonesFondo() {
+  if (nivelAnimacionEfectivo() === 'off') return;
+  crearCorazonesFondo(14);
+  const wrap = document.getElementById('heartsBg');
+  if (wrap) { wrap.classList.add('hearts-celebrar'); setTimeout(() => wrap.classList.remove('hearts-celebrar'), 2500); }
 }
 
 /* ============================================================
@@ -1363,6 +1982,13 @@ function aceptarPropuesta() {
   if (!state.startDate) { state.startDate = new Date().toISOString(); LS.set('startDate', state.startDate); }
   state.accepted = true; LS.set('accepted', true);
 
+  reproducirSonido('exito');
+  celebrarCorazonesFondo();
+  const wash = document.createElement('div');
+  wash.style.cssText = 'position:fixed;inset:0;z-index:9500;pointer-events:none;background:radial-gradient(circle at 50% 45%, rgba(240,160,192,0.35), transparent 65%);opacity:0;transition:opacity 0.5s ease;';
+  document.body.appendChild(wash);
+  requestAnimationFrame(() => { wash.style.opacity = '1'; setTimeout(() => { wash.style.opacity = '0'; setTimeout(() => wash.remove(), 600); }, 500); });
+
   const d = { particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#9b7df8','#f0a0c0','#d4a96a','#ffffff'] };
   confetti(d);
   setTimeout(() => confetti({ ...d, particleCount: 80, origin: { y: 0.7 } }), 400);
@@ -1410,6 +2036,8 @@ function initApp() {
   document.getElementById('fraseTexto').textContent = FRASES[0];
 
   renderSettingsUI();
+  aplicarNivelAnimacion();
+  renderMoodUI();
   document.getElementById('cfg-nombre1').value = state.names.n1;
   document.getElementById('cfg-nombre2').value = state.names.n2;
   document.getElementById('cfg-ianombre').value = state.iaNombre;
@@ -1433,10 +2061,31 @@ function calcularTiempoExacto(ini, ahora) {
   return { y, mo, d, h, mi, s };
 }
 
+function estadoRelacion() {
+  if (state.endDate) return 'terminada';
+  if (state.accepted && state.startDate) return 'activa';
+  return 'pendiente';
+}
+
 function iniciarContador() {
   if (!state.startDate) return;
+  clearInterval(counterInterval);
+  const ini = new Date(state.startDate);
+
+  if (state.endDate) {
+    const fin = new Date(state.endDate);
+    // Estado imposible (fin antes de inicio, por ejemplo tras editar la fecha a mano): no mostramos números sin sentido.
+    const t = fin >= ini ? calcularTiempoExacto(ini, fin) : { y:0, mo:0, d:0, h:0, mi:0, s:0 };
+    const pad = n => String(n).padStart(2,'0');
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = pad(v); };
+    set('c-y', t.y); set('c-mo', t.mo); set('c-d', t.d); set('c-h', t.h); set('c-mi', t.mi); set('c-s', t.s);
+    const fechaInicio = ini.toLocaleDateString('es-ES', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const el1 = document.getElementById('startDateDisplay'); if (el1) el1.textContent = fechaInicio;
+    renderCierreRelacion(ini, fin);
+    return;
+  }
+
   const tick = () => {
-    const ini = new Date(state.startDate);
     const ahora = new Date();
     const t = calcularTiempoExacto(ini, ahora);
     const pad = n => String(n).padStart(2,'0');
@@ -1459,7 +2108,6 @@ function iniciarContador() {
     actualizarHeaderDays();
   };
   tick();
-  clearInterval(counterInterval);
   counterInterval = setInterval(tick, 1000);
 }
 
@@ -1474,6 +2122,44 @@ function actualizarHeaderDays() {
     else badge.textContent = `💜 ${t.d}d ${String(t.h).padStart(2,'0')}h`;
   }
 }
+
+function renderCierreRelacion(ini, fin) {
+  const grid = document.getElementById('counterGrid');
+  const since = document.getElementById('sinceDate');
+  const anivCard = document.getElementById('aniverCard');
+  const cierre = document.getElementById('cierreRelacion');
+  const label = document.querySelector('.counter-label');
+  const editBtn = document.getElementById('btnEditarFecha');
+  if (label) label.textContent = 'Jhamir y Evolet estuvieron juntos';
+  if (since) since.textContent = '';
+  if (anivCard) anivCard.style.display = 'none';
+  if (editBtn) editBtn.style.display = 'none';
+  if (cierre) {
+    cierre.style.display = 'block';
+    const f = d => d.toLocaleDateString('es-ES', { day:'2-digit', month:'long', year:'numeric' });
+    document.getElementById('cierreInicio').textContent = f(ini);
+    document.getElementById('cierreFin').textContent = f(fin);
+  }
+}
+
+function terminarRelacion() {
+  if (!requiereAdmin()) return;
+  if (!state.startDate) { toast('Todavía no hay una relación activa para terminar'); return; }
+  if (state.endDate) { toast('Ya está marcada como terminada'); return; }
+  Swal.fire({
+    title: '¿Seguro que quieres terminar nuestra relación?',
+    html: 'Esta acción marcará la relación como terminada y guardará la fecha de finalización.<br><br><span style="font-size:0.78rem;color:var(--text3);">Las cartas y recuerdos no se borran — siguen disponibles como historial.</span>',
+    showCancelButton: true, confirmButtonText: 'Sí, terminar', cancelButtonText: 'Cancelar', confirmButtonColor: '#8a5a6a'
+  }).then(r => {
+    if (!r.isConfirmed) return;
+    if (state.endDate) return; // doble guarda por si se alcanzó a tocar dos veces
+    state.endDate = new Date().toISOString();
+    LS.set('endDate', state.endDate);
+    iniciarContador();
+    toast('Quedó guardado');
+  });
+}
+
 
 function editarFechaInicio() {
   if (!requiereAdmin()) return;
@@ -1537,14 +2223,15 @@ function cerrarSesionAdmin() {
   firebase.auth().signOut().then(() => toast('Sesión cerrada'));
 }
 
+let authResuelto = false;
 function iniciarObservadorAuth() {
-  if (!firebaseListo) return;
-  firebase.auth().onAuthStateChanged(() => actualizarAdminUI());
+  if (!firebaseListo) { authResuelto = true; return; }
+  firebase.auth().onAuthStateChanged(() => { authResuelto = true; actualizarAdminUI(); });
 }
 
 function setWhoAmI(who) {
   state.whoami = who; LS.set('whoami', who);
-  actualizarIdentidadUI(); cargarCartaPublicada(); renderCartaAdminPicker();
+  actualizarIdentidadUI(); cargarCartaPublicada(); renderCartaAdminPicker(); renderMoodUI();
   toast(who === 'jhamir' ? 'Apareces como Jhamir 🕷️' : 'Apareces como Evolet 🌸');
 }
 
@@ -1563,8 +2250,22 @@ function actualizarAdminUI() {
   if (resetNote) resetNote.style.display = admin ? 'none' : 'flex';
   const cartaAdminTools = document.getElementById('cartaAdminTools');
   if (cartaAdminTools) cartaAdminTools.style.display = admin ? 'block' : 'none';
+  const terminarCard = document.getElementById('terminarRelacionCard');
+  const terminarBtn = document.getElementById('btnTerminarRelacion');
+  const terminarNote = document.getElementById('terminarLockNote');
+  if (terminarCard) terminarCard.style.display = (estadoRelacion() === 'activa') ? 'block' : 'none';
+  if (terminarBtn) terminarBtn.style.opacity = admin ? '1' : '0.55';
+  if (terminarNote) terminarNote.style.display = admin ? 'none' : 'flex';
   const loginForm = document.getElementById('adminLoginForm');
   const loggedIn = document.getElementById('adminLoggedIn');
+  const checking = document.getElementById('adminChecking');
+  if (firebaseListo && !authResuelto) {
+    if (checking) checking.style.display = 'block';
+    if (loginForm) loginForm.style.display = 'none';
+    if (loggedIn) loggedIn.style.display = 'none';
+    return;
+  }
+  if (checking) checking.style.display = 'none';
   if (loginForm) loginForm.style.display = admin ? 'none' : 'block';
   if (loggedIn) loggedIn.style.display = admin ? 'block' : 'none';
 }
@@ -2111,13 +2812,15 @@ function eliminarCapsula(i) { state.capsulas.splice(i,1); LS.set('capsulas', sta
 /* ============================================================
    PREGUNTA DEL DÍA / RACHA
 ============================================================ */
-function renderPreguntaDia() {
+function renderPreguntaDia(aleatoria) {
+  const el = document.getElementById('preguntaDiaText');
+  if (!el) return;
+  if (aleatoria) { el.textContent = PREGUNTAS_DIA[Math.floor(Math.random() * PREGUNTAS_DIA.length)]; return; }
   const start = new Date(2026,0,1);
   const now = new Date();
   const dayOfYear = Math.floor((now - start) / 86400000);
   const idx = ((dayOfYear % PREGUNTAS_DIA.length) + PREGUNTAS_DIA.length) % PREGUNTAS_DIA.length;
-  const el = document.getElementById('preguntaDiaText');
-  if (el) el.textContent = PREGUNTAS_DIA[idx];
+  el.textContent = PREGUNTAS_DIA[idx];
 }
 
 function actualizarRacha() {
@@ -2300,14 +3003,24 @@ function renderThemeGrid() {
 function aplicarTemaSilencioso(key) {
   const t = THEMES[key]; if (!t) return;
   Object.keys(t.vars).forEach(varName => document.documentElement.style.setProperty(varName, t.vars[varName]));
+  crearParticulasAmbiente(key);
+  renderEscenaInicio(key);
 }
 function aplicarTema(key) {
   const t = THEMES[key]; if (!t) return;
-  aplicarTemaSilencioso(key);
+  const decor = document.getElementById('inicioSceneDecor');
+  if (decor && nivelAnimacionEfectivo() !== 'off') {
+    decor.style.transition = 'opacity 0.25s ease';
+    decor.style.opacity = '0';
+    setTimeout(() => { aplicarTemaSilencioso(key); decor.style.opacity = '1'; }, 220);
+  } else {
+    aplicarTemaSilencioso(key);
+  }
   state.theme = key; LS.set('theme', key);
   document.querySelectorAll('.theme-swatch').forEach(el => el.classList.remove('selected'));
   document.getElementById('themeSwatch_' + key)?.classList.add('selected');
   toast('Tema aplicado: ' + t.name);
+  if (t.heartsOnEnter) dispararCorazones(6);
 }
 
 /* ============================================================
@@ -2450,6 +3163,7 @@ function toast(msg) {
 ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
   crearEstrellas();
+  crearCorazonesFondo();
   if (state.accepted && state.startDate) {
     document.getElementById('proposal').style.display = 'none';
     document.getElementById('app').classList.add('visible');
@@ -2457,6 +3171,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   iniciarSincronizacion();
   iniciarObservadorAuth();
+  iniciarParallax();
 });
 </script>
 </body>
